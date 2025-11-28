@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="9" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="5">
+ <tileset firstgid="1" source="pokemon_tileset_from_public_tiles_by_chaoticcherrycake_d5xdb0y.tsx"/>
+ <layer id="1" name="타일 레이어 1" width="9" height="9">
+  <data encoding="csv">
+7019,7020,7021,7021,7019,7020,7021,7021,7021,
+7019,7020,7021,7020,7021,7021,7021,7019,7020,
+7019,7020,7021,7020,7019,7019,7019,7019,7019,
+7019,7020,7021,7020,7019,7019,7019,7019,7020,
+7019,7020,7021,7020,7019,7020,7019,7019,7020,
+7020,7021,7021,7021,7019,7019,7020,7020,7020,
+7019,7019,7020,7021,7021,7020,7020,7020,7020,
+7019,7019,7019,7020,7021,7020,7020,7020,7020,
+7019,7019,7019,7019,7019,7020,7020,7020,7020
+</data>
+ </layer>
+ <layer id="5" name="coliision" width="9" height="9">
+  <properties>
+   <property name="collision" value="True"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,17271,17271,0,0,
+0,0,0,0,0,0,0,0,17271,
+0,0,0,0,0,0,0,0,17271,
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,17271,
+0,0,0,0,0,0,0,0,17271,
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="6" name="spawns">
+  <object id="4" name="player_spawn" x="24.414" y="32.9058" width="20.1681" height="17.6913">
+   <properties>
+    <property name="player_spawn" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="2" name="object" width="9" height="9">
+  <data encoding="csv">
+0,9151,9153,0,0,0,0,0,8068,
+0,0,0,0,0,0,0,0,8208,
+0,0,0,0,0,0,0,0,8210,
+0,0,0,0,7570,0,0,7570,8868,
+0,0,0,0,7570,7570,7570,7570,9008,
+0,0,0,0,0,0,7570,7570,9010,
+0,0,0,0,0,0,0,7570,7570,
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,7994,7995,7996,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="portal">
+  <object id="3" x="65.1039" y="140.115" width="47.0588" height="11.6762">
+   <properties>
+    <property name="portal_type" value="map"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="3" name="object2" width="9" height="9">
+  <data encoding="csv">
+8781,0,0,0,0,8488,8488,0,0,
+8921,0,0,0,0,0,0,0,8069,
+0,0,0,0,0,0,0,0,8209,
+0,0,0,0,0,0,0,0,8868,
+0,0,0,0,0,0,0,0,8870,
+9187,0,0,0,0,0,0,0,9010,
+9327,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
