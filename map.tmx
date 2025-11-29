@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="128" height="108" tilewidth="16" tileheight="16" infinite="0" nextlayerid="26" nextobjectid="58">
+=======
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="128" height="108" tilewidth="16" tileheight="16" infinite="0" nextlayerid="27" nextobjectid="140">
+>>>>>>> b45b340b (almost done)
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -233,6 +237,18 @@
   <object id="53" x="863.821" y="268.847" width="48.9653" height="35.1072">
    <properties>
     <property name="portal_type" value="house"/>
+<<<<<<< HEAD
+=======
+    <property name="target_spawn" value="from_house"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="26" name="spawns">
+  <object id="58" x="875.89" y="332.879" width="30.3076" height="16.1641">
+   <properties>
+    <property name="from_house" value=""/>
+    <property name="from_map" value=""/>
+>>>>>>> b45b340b (almost done)
    </properties>
   </object>
  </objectgroup>
@@ -482,12 +498,15 @@
   <object id="36" x="592.5" y="384" width="14.5" height="32.5"/>
   <object id="37" x="560" y="416.5" width="63.5" height="15"/>
   <object id="38" x="545.5" y="401" width="14.5" height="14.5"/>
+<<<<<<< HEAD
   <object id="39" x="305.945" y="561.99" width="23" height="22">
    <properties>
     <property name="enemy_type" value="slime"/>
     <property name="level" type="int" value="13"/>
    </properties>
   </object>
+=======
+>>>>>>> b45b340b (almost done)
  </objectgroup>
  <layer id="14" name="TreeFillerBackground" width="128" height="108" visible="0">
   <data encoding="csv">
@@ -720,12 +739,21 @@
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+<<<<<<< HEAD
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+=======
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9175,9176,9456,9456,9456,9456,9456,9456,9456,9456,9456,9456,9456,9456,9456,9177,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+>>>>>>> b45b340b (almost done)
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -772,12 +800,21 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,715,716,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,855,856,0,0,0,0,0,0,566,0,0,0,0,0,0,0,566,0,0,0,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+<<<<<<< HEAD
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,715,716,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,855,856,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+=======
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,9451,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,0,566,0,0,0,0,0,0,0,0,0,0,9451,9451,9451,9451,9451,9451,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,566,566,566,0,0,0,0,0,0,0,0,0,0,9451,9451,9451,9451,9451,9451,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9451,9451,9451,9451,0,9451,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,715,716,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9451,9451,9451,9451,9451,9451,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,855,856,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,9451,9451,9451,9451,9451,9451,0,0,0,0,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+>>>>>>> b45b340b (almost done)
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,566,566,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,566,566,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,566,0,0,0,0,0,0,566,0,0,0,0,0,566,566,566,566,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,0,0,0,566,566,0,0,0,0,0,0,566,566,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,566,566,566,566,566,566,566,566,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -829,6 +866,7 @@
 </data>
  </layer>
  <objectgroup id="22" name="enemies">
+<<<<<<< HEAD
   <object id="40" x="150.667" y="336.333" width="30" height="25">
    <properties>
     <property name="enemy_type" value="slime"/>
@@ -880,9 +918,566 @@
    </properties>
   </object>
   <object id="57" x="296.563" y="51.7369" width="29.5639" height="26.7923">
+=======
+  <object id="41" x="262.021" y="99.8649" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="1"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="57" x="910.523" y="79.4024" width="29.5639" height="26.7923">
+>>>>>>> b45b340b (almost done)
    <properties>
     <property name="enemy_type" value="dummy"/>
    </properties>
   </object>
+<<<<<<< HEAD
+=======
+  <object id="60" x="850.296" y="79.1767" width="29.5639" height="26.7923">
+   <properties>
+    <property name="enemy_type" value="dummy"/>
+   </properties>
+  </object>
+  <object id="62" x="40.395" y="151.493" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="5"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="63" x="122.327" y="69.5604" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="1"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="64" x="182.979" y="152.557" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="2"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="65" x="154.249" y="279.18" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="5"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="66" x="256.398" y="216.4" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="2"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="67" x="80.8291" y="380.265" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="4"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="68" x="219.156" y="382.393" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="3"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="69" x="48.9074" y="278.115" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="3"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="71" x="213.987" y="760.644" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="7"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="72" x="21.0908" y="789.927" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="11"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="73" x="104.087" y="760.133" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="7"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="74" x="162.611" y="844.194" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="6"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="75" x="92.3826" y="865.475" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="8"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="76" x="199.852" y="939.958" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="5"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="77" x="105.151" y="1016.57" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="6"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="78" x="204.108" y="1020.83" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="5"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="79" x="29.6032" y="916.549" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="8"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="80" x="1760.59" y="1533.68" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="12"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="81" x="1661.33" y="1387.39" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="13"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="82" x="1744.33" y="1357.6" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="12"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="83" x="1832.65" y="1391.65" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="15"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="84" x="1827.33" y="1556.58" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="15"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="85" x="1726.24" y="1431.02" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="14"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="86" x="1675.17" y="1570.41" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="13"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="87" x="1844.35" y="1618.3" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="14"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="88" x="1648.56" y="1464" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="13"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="89" x="1176.05" y="192.972" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="23"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="90" x="1076.79" y="46.6815" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="19"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="91" x="1159.78" y="16.8915" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="24"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="92" x="1248.1" y="50.9415" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="15"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="93" x="1242.78" y="215.872" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="20"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="94" x="1141.7" y="90.3115" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="25"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="95" x="1090.62" y="229.702" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="23"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="96" x="1241.71" y="124.357" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="20"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="97" x="1064.02" y="123.292" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="25"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="98" x="1185.32" y="135.532" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="21"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="99" x="1123.6" y="177.03" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="22"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="100" x="1314.07" y="171.71" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="23"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="101" x="437.062" y="1482.07" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="26"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="102" x="331.417" y="1350.68" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="30"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="103" x="414.407" y="1320.89" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="29"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="104" x="379.297" y="1466.67" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="29"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="105" x="494.215" y="1497.53" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="28"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="106" x="485.708" y="1416.66" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="29"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="107" x="360.144" y="1529.45" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="26"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="108" x="556.988" y="1413.46" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="24"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="109" x="318.647" y="1427.29" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="31"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="110" x="413.346" y="1408.67" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="25"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="111" x="491.017" y="1344.83" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="26"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="112" x="568.697" y="1475.71" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="28"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="113" x="1734.68" y="637.747" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="38"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="114" x="1635.42" y="491.457" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="44"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="115" x="1718.41" y="461.667" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="41"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="116" x="1806.73" y="495.717" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="40"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="117" x="1801.41" y="660.647" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="37"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="118" x="1700.32" y="535.087" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="35"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="119" x="1649.25" y="674.477" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="42"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="120" x="1789.7" y="564.877" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="42"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="121" x="1622.65" y="568.067" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="37"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="122" x="1764.47" y="1018.68" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="31"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="123" x="1665.21" y="872.389" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="34"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="124" x="1748.2" y="842.599" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="12"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="125" x="1836.52" y="876.649" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="30"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="126" x="1831.2" y="1041.58" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="29"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="127" x="1730.11" y="916.019" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="33"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="128" x="1679.04" y="1055.41" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="31"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="129" x="1848.22" y="1103.29" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="36"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="130" x="1652.44" y="948.999" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="35"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="131" x="945.15" y="1450.69" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="132" x="845.89" y="1304.4" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="133" x="928.88" y="1274.61" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="134" x="1017.2" y="1308.66" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="135" x="1011.88" y="1473.59" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="136" x="910.79" y="1348.03" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="137" x="859.72" y="1487.42" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="138" x="1028.9" y="1535.3" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+  <object id="139" x="833.12" y="1381.01" width="32" height="29">
+   <properties>
+    <property name="enemy_type" value="slime"/>
+    <property name="level" type="int" value="100"/>
+    <property name="slime" value=""/>
+   </properties>
+  </object>
+>>>>>>> b45b340b (almost done)
  </objectgroup>
 </map>

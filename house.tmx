@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="9" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="5">
+=======
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="9" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="6">
+>>>>>>> b45b340b (almost done)
  <tileset firstgid="1" source="pokemon_tileset_from_public_tiles_by_chaoticcherrycake_d5xdb0y.tsx"/>
  <layer id="1" name="타일 레이어 1" width="9" height="9">
   <data encoding="csv">
@@ -54,6 +58,16 @@
   <object id="3" x="65.1039" y="140.115" width="47.0588" height="11.6762">
    <properties>
     <property name="portal_type" value="map"/>
+<<<<<<< HEAD
+=======
+    <property name="target_spawn" value="from_map"/>
+   </properties>
+  </object>
+  <object id="5" x="72.605" y="93.9407" width="27.7046" height="8.59797">
+   <properties>
+    <property name="from_house" value=""/>
+    <property name="from_map" value=""/>
+>>>>>>> b45b340b (almost done)
    </properties>
   </object>
  </objectgroup>
