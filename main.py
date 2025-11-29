@@ -72,8 +72,6 @@ if os.path.exists("img/book.png"):
 else:
     print("[DEBUG] img/book.png 를 찾을 수 없습니다.")
 
-<<<<<<< HEAD
-=======
 STAFF_IMAGE = None
 if os.path.exists("img/jipang.jpg"):
     try:
@@ -83,7 +81,6 @@ if os.path.exists("img/jipang.jpg"):
     except Exception as e:
         print(f"[DEBUG] jipang.jpg 로드 실패: {e}")
 
->>>>>>> b45b340b (almost done)
 SLIME_STAND_FRAMES = []
 SLIME_STAND_DELAYS = [200, 300, 250]
 SLIME_DIE_FRAMES = []
@@ -276,51 +273,6 @@ class TiledMap:
         return False
 
     def find_player_spawn(self):
-<<<<<<< HEAD
-        for layer in self.tmx.layers:
-            if not hasattr(layer, "objects"):
-                continue
-            layer_name = getattr(layer, "name", "")
-            for obj in layer.objects:
-                props = getattr(obj, "properties", {}) or {}
-                name = (getattr(obj, "name", "") or "").lower()
-                spawn_type = str(props.get("spawn_type", "")).lower()
-                if name == "player_spawn" or spawn_type == "player":
-                    x = int(obj.x * self.scale)
-                    y = int(obj.y * self.scale)
-                    print(f"[DEBUG] 플레이어 스폰 발견: layer='{layer_name}', name='{name}', spawn_type='{spawn_type}', pos=({x},{y})")
-                    return x, y
-        print("[DEBUG] 플레이어 스폰 오브젝트를 찾지 못했습니다. (0,0)을 사용합니다.")
-        return 0, 0
-
-    def find_enemy_spawns(self):
-        spawns = []
-        for layer in self.tmx.layers:
-            layer_name = getattr(layer, "name", "")
-            lname = layer_name.lower()
-            print(f"[DEBUG] 레이어 확인: {layer_name}")
-            if "enemies" in lname:
-                if hasattr(layer, "objects"):
-                    print(f"[DEBUG] Enemies 레이어에서 {len(layer.objects)}개의 오브젝트 발견")
-                    for obj in layer.objects:
-                        props = getattr(obj, "properties", {}) or {}
-                        raw_type = props.get('enemy_type', getattr(obj, "name", "slime"))
-                        enemy_type = str(raw_type).strip().lower()
-                        raw_level = props.get("level", props.get("enemy_level", 1))
-                        try:
-                            level = int(raw_level)
-                        except (TypeError, ValueError):
-                            level = 1
-                        ex = int(obj.x * self.scale)
-                        ey = int(obj.y * self.scale)
-                        spawns.append((ex, ey, enemy_type, level))
-                        print(f"[DEBUG] 적 스폰: type={enemy_type}, level={level}, pos=({ex}, {ey})")
-                else:
-                    try:
-                        objs = list(layer)
-                        print(f"[DEBUG] Enemies 레이어(iter)에서 {len(objs)}개의 오브젝트 발견")
-                        for obj in objs:
-=======
         """기본 스폰 위치: player_spawn 이라는 이름/속성/프로퍼티 가진 오브젝트."""
         for obj in self.tmx.objects:  # TMX 안 모든 오브젝트 훑기
             props = getattr(obj, "properties", {}) or {}
@@ -381,7 +333,6 @@ class TiledMap:
                     if hasattr(layer, "objects"):
                         print(f"[DEBUG] Enemies 레이어에서 {len(layer.objects)}개의 오브젝트 발견")
                         for obj in layer.objects:
->>>>>>> b45b340b (almost done)
                             props = getattr(obj, "properties", {}) or {}
                             raw_type = props.get('enemy_type', getattr(obj, "name", "slime"))
                             enemy_type = str(raw_type).strip().lower()
@@ -394,42 +345,6 @@ class TiledMap:
                             ey = int(obj.y * self.scale)
                             spawns.append((ex, ey, enemy_type, level))
                             print(f"[DEBUG] 적 스폰: type={enemy_type}, level={level}, pos=({ex}, {ey})")
-<<<<<<< HEAD
-                    except TypeError:
-                        print("[DEBUG] Enemies 레이어를 순회할 수 없습니다.")
-        print(f"[DEBUG] 총 {len(spawns)}개의 적 스폰 위치 발견")
-        return spawns
-
-    def find_portals(self):
-        portals = []
-        for layer in self.tmx.layers:
-            if hasattr(layer, "tiles") or hasattr(layer, "data"):
-                continue
-            try:
-                iterator = iter(layer)
-            except TypeError:
-                continue
-            for obj in iterator:
-                props = getattr(obj, "properties", {}) or {}
-                if "portal_type" not in props:
-                    continue
-                portal_type = str(props.get("portal_type", "")).strip()
-                w = int(getattr(obj, "width", 50) * self.scale) or 50
-                h = int(getattr(obj, "height", 100) * self.scale) or 100
-                rect = pygame.Rect(
-                    int(obj.x * self.scale),
-                    int(obj.y * self.scale),
-                    w, h
-                )
-                portals.append({
-                    "rect": rect,
-                    "portal_type": portal_type
-                })
-        print(f"[DEBUG] TMX 포탈 개수: {len(portals)}")
-        for p in portals:
-            print(f"  portal_type={p['portal_type']}, rect={p['rect']}")
-        return portals
-=======
                     else:
                         try:
                             objs = list(layer)
@@ -479,7 +394,6 @@ class TiledMap:
             for p in portals:
                 print(f"portal_type={p['portal_type']},target_spawn={p['target_spawn']},rect={p['rect']}")
             return portals
->>>>>>> b45b340b (almost done)
 
 
 
@@ -518,8 +432,6 @@ class DamageText:
         text_rect = text_surf.get_rect(center=(int(sx), int(sy)))
         surface.blit(text_surf, text_rect)
 
-<<<<<<< HEAD
-=======
 def xp_needed_for_level(level: int) -> int:
     return max(1, int(5 * (level ** 2) + 20 * level + 100))
 
@@ -528,19 +440,13 @@ def slime_max_hp_for_level(level: int) -> int:
     hp_per_level = 15
     return base_hp + hp_per_level * max(0, level - 1)
 
->>>>>>> b45b340b (almost done)
 
 class Player:
     def __init__(self, x, y, gender='male'):
         self.x, self.y = x, y
         self.width, self.height = PLAYER_SIZE, PLAYER_SIZE
         self.speed = 5
-<<<<<<< HEAD
-        self.max_hp, self.hp = 100, 100
-        self.max_mp, self.mp = 100, 100
-=======
         self.hp_regen = 0.025
->>>>>>> b45b340b (almost done)
         self.mp_regen = 0.5
         self.images = load_character_images(gender, size=self.width)
         self.current_direction = 'down'
@@ -549,15 +455,10 @@ class Player:
         self.animation_speed = 10
         self.is_moving = False
         self.level = 1
-<<<<<<< HEAD
-        self.xp = 0
-        self.xp_to_next = 100
-=======
         self.max_hp, self.hp = 100 + 20 * self.level, 100 + 20 * self.level
         self.max_mp, self.mp = 100 + 10 * self.level, 100 + 10 * self.level
         self.xp = 0
         self.xp_to_next = xp_needed_for_level(self.level) 
->>>>>>> b45b340b (almost done)
         self.inventory = {
             "HP 포션": 3,
         }
@@ -565,28 +466,6 @@ class Player:
         self.equipped_spells = []
         self.weapon = "맨손"
 
-<<<<<<< HEAD
-        self.known_spells["iceberg"] = "S"
-        self.equipped_spells.append("iceberg")
-        self.known_spells["meteor"] = "S"
-        self.equipped_spells.append("meteor")
-        self.known_spells["thunder"] = "S"
-        self.equipped_spells.append("thunder")
-        self.known_spells["backflow"] = "S"
-        self.equipped_spells.append("backflow")
-
-        self.known_spells["fireball"] = "C"
-        self.equipped_spells.append("fireball")
-        self.known_spells["ice_lans"] = "C"
-        self.equipped_spells.append("ice_lans")
-        self.known_spells["lightning_bolt"] = "C"
-        self.equipped_spells.append("lightning_bolt")
-        self.known_spells["water_blast"] = "C"
-        self.equipped_spells.append("water_blast")
-
-        self.spell_sounds = {}
-
-=======
         # self.known_spells["iceberg"] = "S"  
         # self.equipped_spells.append("iceberg")
         # self.known_spells["meteor"] = "S"
@@ -611,7 +490,6 @@ class Player:
         return WEAPON_DAMAGE_MULTIPLIERS.get(self.weapon, 1.0)
 
 
->>>>>>> b45b340b (almost done)
     def move(self, keys, game_map):
         self.is_moving = False
         move_speed = self.speed * (1.5 if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL] else 1.0)
@@ -655,14 +533,6 @@ class Player:
     def regen_mp(self):
         self.mp = min(self.max_mp, self.mp + self.mp_regen)
 
-<<<<<<< HEAD
-    def add_xp(self, amount):
-        self.xp += amount
-        print(f"[XP] 경험치 +{amount} (현재 {self.xp}/{self.xp_to_next})")
-        while self.xp >= self.xp_to_next:
-            self.xp -= self.xp_to_next
-            self.level += 1
-=======
     def regen_hp(self):
         self.hp = min(self.max_hp, self.hp + self.hp_regen)
 
@@ -674,22 +544,16 @@ class Player:
             self.xp -= self.xp_to_next
             self.level += 1
 
->>>>>>> b45b340b (almost done)
             hp_increase = 20
             mp_increase = 10
             self.max_hp += hp_increase
             self.max_mp += mp_increase
             self.hp = self.max_hp
             self.mp = self.max_mp
-<<<<<<< HEAD
-            self.xp_to_next = int(self.xp_to_next * 1.2)
-            print(f"[레벨업] LV {self.level} 달성! HP+{hp_increase}, MP+{mp_increase}")
-=======
 
             self.xp_to_next = xp_needed_for_level(self.level)
 
             print(f"[레벨업] LV {self.level} 달성! HP +{hp_increase}, MP +{mp_increase}")
->>>>>>> b45b340b (almost done)
             print(f"[레벨업] 다음 레벨까지: {self.xp_to_next} EXP")
 
     def cast_spell(self, target_world_pos, spell_type="fireball", current_map=None):
@@ -697,10 +561,6 @@ class Player:
             print("아직 배우지 않은 마법입니다.")
             return None
 
-<<<<<<< HEAD
-        # MP 소모량 설정
-=======
->>>>>>> b45b340b (almost done)
         if spell_type == "fireball":
             mp_cost = 20
         elif spell_type == "ice_lans":
@@ -725,19 +585,12 @@ class Player:
             return None
         self.mp -= mp_cost
 
-<<<<<<< HEAD
-=======
         weapon_mult = self.get_weapon_multiplier()
->>>>>>> b45b340b (almost done)
 
         sound = self.spell_sounds.get(spell_type)
         if sound is not None:
             sound.play()
 
-<<<<<<< HEAD
-        #마법 시작 좌표.
-=======
->>>>>>> b45b340b (almost done)
         sx = self.x + self.width // 2
         sy = self.y + self.height // 2
         dx = target_world_pos[0] - sx
@@ -746,16 +599,6 @@ class Player:
 
 
         if spell_type in ("meteor", "thunder", "iceberg", "backflow") and current_map is not None:
-<<<<<<< HEAD
-            center_x, center_y = target_world_pos
-
-            if spell_type == "meteor":
-                radius = 140
-                base_damage = 80
-                extra = {
-                    "damage": base_damage,
-                    "start_pos": (sx, sy),
-=======
                 # 같은 레벨 슬라임 기준 HP
             same_slime_hp = slime_max_hp_for_level(self.level)
             center_x, center_y = target_world_pos
@@ -767,7 +610,6 @@ class Player:
                 extra = {
                     "start_pos": (sx, sy),
                     "damage_multiplier": weapon_mult,
->>>>>>> b45b340b (almost done)
                 }
                 current_map.area_effects.append(
                     AreaEffect("meteor", center_x, center_y, radius, extra=extra)
@@ -776,13 +618,8 @@ class Player:
 
             elif spell_type == "thunder":
                 radius = 200
-<<<<<<< HEAD
-                base_damage = 70
-                extra = {"damage": base_damage}
-=======
                 base_damage = max(1, int(same_slime_hp / 20))
                 extra = {"damage": base_damage, "damage_multiplier": weapon_mult}
->>>>>>> b45b340b (almost done)
                 current_map.area_effects.append(
                     AreaEffect("thunder", center_x, center_y, radius, extra=extra)
                 )
@@ -790,10 +627,6 @@ class Player:
 
             elif spell_type == "iceberg":
                 radius = 130
-<<<<<<< HEAD
-                base_damage = 60
-                extra = {"damage": base_damage, "freeze_time": 240}
-=======
                 # 같은 레벨 슬라임 HP의 38%
                 base_damage = max(1, int(same_slime_hp * 0.38))
                 extra = {
@@ -801,7 +634,6 @@ class Player:
                     "freeze_time": 240,
                     "damage_multiplier": weapon_mult,
                 }
->>>>>>> b45b340b (almost done)
                 current_map.area_effects.append(
                     AreaEffect("iceberg", center_x, center_y, radius, extra=extra)
                 )
@@ -814,14 +646,10 @@ class Player:
                 cone_half_angle = math.radians(60)
                 dir_x = dx / dist
                 dir_y = dy / dist
-<<<<<<< HEAD
-                base_damage = 50
-=======
 
                 # 같은 레벨 슬라임 HP의 32%
                 base_damage = max(1, int(same_slime_hp * 0.32 * weapon_mult))
 
->>>>>>> b45b340b (almost done)
                 for enemy in current_map.enemies:
                     ex = enemy.x + enemy.width / 2
                     ey = enemy.y + enemy.height / 2
@@ -830,29 +658,20 @@ class Player:
                     enemy_dist = math.hypot(vx, vy)
                     if enemy_dist <= 0 or enemy_dist > max_range:
                         continue
-<<<<<<< HEAD
-=======
 
->>>>>>> b45b340b (almost done)
                     nvx = vx / enemy_dist
                     nvy = vy / enemy_dist
                     dot = nvx * dir_x + nvy * dir_y
                     dot = max(-1.0, min(1.0, dot))
                     angle = math.acos(dot)
-<<<<<<< HEAD
-=======
 
->>>>>>> b45b340b (almost done)
                     if angle <= cone_half_angle:
                         enemy.hp -= base_damage
                         current_map.damage_texts.append(
                             DamageText(ex, enemy.y, base_damage)
                         )
                         enemy.apply_slow(duration=360)
-<<<<<<< HEAD
-=======
 
->>>>>>> b45b340b (almost done)
                 extra = ((sx, sy), (dir_x, dir_y), cone_half_angle)
                 current_map.area_effects.append(
                     AreaEffect("backflow", center_x, center_y, max_range, extra=extra)
@@ -861,10 +680,6 @@ class Player:
 
             return None
 
-<<<<<<< HEAD
-        # ---------- 기존 C급 투사체 마법 ----------
-=======
->>>>>>> b45b340b (almost done)
         if dist > 0:
             return Spell(sx, sy, dx / dist, dy / dist, spell_type, dist)
         return None
@@ -886,12 +701,8 @@ class LightningChain:
         self.chain_x = x
         self.chain_y = y
         self.damage = damage
-<<<<<<< HEAD
-        self.hit_enemies = hit_enemies
-=======
         # 이미 맞은 적 id를 set으로 관리해 재타겟 방지
         self.hit_enemies = set(hit_enemies)
->>>>>>> b45b340b (almost done)
         self.lifetime = max_lifetime
         self.active = True
         self.chain_delay = 0
@@ -930,11 +741,7 @@ class LightningChain:
             self.chain_x = self.x
             self.chain_y = self.y
             closest_enemy.hp -= self.damage
-<<<<<<< HEAD
-            self.hit_enemies.append(id(closest_enemy))
-=======
             self.hit_enemies.add(id(closest_enemy))
->>>>>>> b45b340b (almost done)
             damage_texts.append(DamageText(
                 closest_enemy.x + closest_enemy.width / 2,
                 closest_enemy.y,
@@ -955,26 +762,14 @@ class LightningChain:
             points = []
             for i in range(segments + 1):
                 t = i / segments
-<<<<<<< HEAD
-                #각 점
-=======
->>>>>>> b45b340b (almost done)
                 mid_x = chain_sx + (sx - chain_sx) * t
                 mid_y = chain_sy + (sy - chain_sy) * t
                 dx = sx - chain_sx
                 dy = sy - chain_sy
                 length = math.hypot(dx, dy)
-<<<<<<< HEAD
-                #중간에 수직 넣기
                 if length > 0:
                     perp_x = -dy / length
                     perp_y = dx / length
-                    #흔들기
-=======
-                if length > 0:
-                    perp_x = -dy / length
-                    perp_y = dx / length
->>>>>>> b45b340b (almost done)
                     offset = random.uniform(-10, 10)
                     mid_x += perp_x * offset
                     mid_y += perp_y * offset
@@ -982,8 +777,6 @@ class LightningChain:
             if len(points) >= 2:
                 pygame.draw.lines(surface, (255, 255, 100), False, points, 4)
                 pygame.draw.lines(surface, (255, 255, 255), False, points, 2)
-<<<<<<< HEAD
-=======
         else:
             # 타겟이 없거나 첫 타격 직후에도 번쩍임을 보이도록 짧은 스파크를 그림
             jitter_points = []
@@ -996,7 +789,6 @@ class LightningChain:
                 pygame.draw.line(surface, (255, 255, 120), (int(sx), int(sy)), (int(px), int(py)), 2)
             if jitter_points:
                 pygame.draw.circle(surface, (255, 255, 200), (int(sx), int(sy)), 6, 2)
->>>>>>> b45b340b (almost done)
         radius = 8 + int(3 * math.sin(pygame.time.get_ticks() / 100))
         pygame.draw.circle(surface, (255, 255, 180), (int(sx), int(sy)), radius)
         pygame.draw.circle(surface, YELLOW, (int(sx), int(sy)), radius - 2)
@@ -1014,14 +806,10 @@ class AreaEffect:
         self.x = x
         self.y = y
         self.size = size
-<<<<<<< HEAD
-        self.extra = extra or {}
-=======
         # extra가 dict가 아닐 수도 있어(backflow에서 튜플 사용). dict 부분만 따로 추출.
         self.extra = extra
         self.extra_dict = extra if isinstance(extra, dict) else {}
         self.damage_multiplier = self.extra_dict.get("damage_multiplier", 1.0)
->>>>>>> b45b340b (almost done)
         self.age = 0
         self.active = True
 
@@ -1031,12 +819,8 @@ class AreaEffect:
             self.impact_done = False
         elif effect_type == "thunder":
             self.max_lifetime = 70
-<<<<<<< HEAD
-            self.base_damage = self.extra.get("damage", 70)
-=======
             base = self.extra_dict.get("damage", 70) * self.damage_multiplier
             self.base_damage = max(1, int(base))
->>>>>>> b45b340b (almost done)
             self.strike_count = 25
             self.strike_interval = 6
             self.strike_radius = int(self.size * 0.4)
@@ -1054,14 +838,9 @@ class AreaEffect:
                 })
         elif effect_type == "iceberg":
             self.max_lifetime = 60
-<<<<<<< HEAD
-            self.base_damage = self.extra.get("damage", 60)
-            self.freeze_time = self.extra.get("freeze_time", 240)
-=======
             base = self.extra_dict.get("damage", 60) * self.damage_multiplier
             self.base_damage = max(1, int(base))
             self.freeze_time = self.extra_dict.get("freeze_time", 240)
->>>>>>> b45b340b (almost done)
             self.hit_enemies = set()
         elif effect_type == "backflow":
             self.max_lifetime = 35
@@ -1070,29 +849,15 @@ class AreaEffect:
 
     def update(self, game_map):
         self.age += 1
-<<<<<<< HEAD
-        if self.effect_type == "meteor" and not self.impact_done:
-            if self.age == self.impact_frame:
-                base_damage = self.extra.get("damage", 80)
-=======
 
         # 🔥 메테오
         if self.effect_type == "meteor" and not self.impact_done:
             if self.age == self.impact_frame:
->>>>>>> b45b340b (almost done)
                 radius = self.size
                 for enemy in game_map.enemies:
                     ex = enemy.x + enemy.width / 2
                     ey = enemy.y + enemy.height / 2
                     if math.hypot(ex - self.x, ey - self.y) <= radius:
-<<<<<<< HEAD
-                        enemy.hp -= base_damage
-                        game_map.damage_texts.append(
-                            DamageText(ex, enemy.y, base_damage, critical=True)
-                        )
-                        enemy.apply_burn(duration=600, total_damage=120)
-                        enemy.apply_slow(duration=300)
-=======
                         # 메테오 데미지 = 적 자신의 최대 HP 의 20%
                         max_hp = getattr(enemy, "max_hp", 100)
                         damage = max(1, int(max_hp * 0.20 * self.damage_multiplier))
@@ -1105,7 +870,6 @@ class AreaEffect:
                         enemy.apply_burn(duration=600, total_damage=120)
                         enemy.apply_slow(duration=300)
 
->>>>>>> b45b340b (almost done)
                 self.impact_done = True
 
         # ----- 천둥: 순차적 낙뢰 판정 -----
@@ -1114,23 +878,12 @@ class AreaEffect:
                 if not s["hit"] and self.age == s["start"]:
                     sx = s["x"]
                     sy = s["y"]
-<<<<<<< HEAD
-=======
                     default_base = max(1, int(100 * 0.05 * self.damage_multiplier))
                     last_damage = None
->>>>>>> b45b340b (almost done)
                     for enemy in game_map.enemies:
                         ex = enemy.x + enemy.width / 2
                         ey = enemy.y + enemy.height / 2
                         if math.hypot(ex - sx, ey - sy) <= self.strike_radius:
-<<<<<<< HEAD
-                            enemy.hp -= self.base_damage
-                            game_map.damage_texts.append(
-                                DamageText(ex, enemy.y, self.base_damage)
-                            )
-                    s["hit"] = True
-                    chain = LightningChain(sx, sy, self.base_damage * 0.6, [])
-=======
                             enemy_max_hp = getattr(enemy, "max_hp", 100)
                             damage = max(1, int(enemy_max_hp * 0.05 * self.damage_multiplier))
                             last_damage = damage
@@ -1142,31 +895,21 @@ class AreaEffect:
                     base_for_chain = last_damage if last_damage is not None else default_base
                     chain_damage = max(1, int(base_for_chain * 0.6))
                     chain = LightningChain(sx, sy, chain_damage, [])
->>>>>>> b45b340b (almost done)
                     game_map.lightning_chains.append(chain)
 
         # ----- 빙산: 범위 안 적 1회 데미지 + 얼리기 -----
         elif self.effect_type == "iceberg":
             max_hit_radius = self.size * 1.5
-<<<<<<< HEAD
-=======
             base_damage = max(1, int(self.base_damage))
->>>>>>> b45b340b (almost done)
             for enemy in game_map.enemies:
                 ex = enemy.x + enemy.width / 2
                 ey = enemy.y + enemy.height / 2
                 dist = math.hypot(ex - self.x, ey - self.y)
                 if dist <= max_hit_radius:
                     if id(enemy) not in self.hit_enemies:
-<<<<<<< HEAD
-                        enemy.hp -= self.base_damage
-                        game_map.damage_texts.append(
-                            DamageText(ex, enemy.y, self.base_damage)
-=======
                         enemy.hp -= base_damage
                         game_map.damage_texts.append(
                             DamageText(ex, enemy.y, base_damage)
->>>>>>> b45b340b (almost done)
                         )
                         enemy.frozen_timer = max(enemy.frozen_timer, self.freeze_time)
                         enemy.ice_hit_count = 0
@@ -1579,35 +1322,6 @@ class Spell:
         if spell_type == "fireball":
             self.speed = 10
             self.radius = 8
-<<<<<<< HEAD
-            self.damage = 25
-            self.max_distance = 600
-            self.color = RED
-        elif spell_type == "ice_lans":
-            self.speed = 7
-            self.radius = 10
-            self.damage = 30
-            self.max_distance = 550
-            self.color = CYAN
-        elif spell_type == "lightning_bolt":
-            self.speed = 15
-            self.radius = 6
-            self.damage = 35
-            self.max_distance = 650
-            self.color = YELLOW
-        elif spell_type == "water_blast":
-            self.speed = 9
-            self.radius = 9
-            self.damage = 28
-            self.max_distance = 580
-            self.color = BLUE
-        else:
-            self.speed = 10
-            self.radius = 8
-            self.damage = 25
-            self.max_distance = 600
-            self.color = RED
-=======
             self.max_distance = 600
             self.color = RED
             self.damage_ratio = 0.20
@@ -1639,15 +1353,11 @@ class Spell:
             self.max_distance = 600
             self.color = RED
             self.damage_ratio = 0.20
->>>>>>> b45b340b (almost done)
 
         if target_distance is not None:
             self.max_distance = target_distance
 
-<<<<<<< HEAD
-=======
 
->>>>>>> b45b340b (almost done)
     def update(self):
         remaining = self.max_distance - self.distance_traveled
         step = self.speed
@@ -1738,11 +1448,7 @@ class Spell:
 class BaseEnemy:
     def __init__(self, x, y):
         self.home_x, self.home_y, self.x, self.y = x, y, x, y
-<<<<<<< HEAD
-        self.state = 'idle'
-=======
         self.state = 'waiting'
->>>>>>> b45b340b (almost done)
         self.width, self.height = int(35 * PLAYER_SCALE), int(35 * PLAYER_SCALE)
         self.speed, self.max_hp, self.hp, self.damage = 2.0, 50, 50, 10
         self.attack_cooldown, self.attack_range = 0, 50 * PLAYER_SCALE * 0.8
@@ -1990,11 +1696,7 @@ class Slime(BaseEnemy):
         hp_per_level = 15
         base_damage = 5
         damage_per_level = 2
-<<<<<<< HEAD
-        self.max_hp = base_hp + hp_per_level * (self.level - 1)
-=======
         self.max_hp = slime_max_hp_for_level(self.level)
->>>>>>> b45b340b (almost done)
         self.hp = self.max_hp
         self.damage = base_damage + damage_per_level * (self.level - 1)
         self.speed = 1.5
@@ -2071,14 +1773,11 @@ class Slime(BaseEnemy):
         else:
             draw_color = (100, 255, 100) if self.state == 'chasing' else (0, 150, 150) if self.state == 'returning' else self.color
             pygame.draw.circle(surface, draw_color, (sx + self.width // 2, sy + self.height // 2), self.width // 2)
-<<<<<<< HEAD
-=======
         # 레벨 표시
         lvl_font = get_korean_font(18)
         lvl_text = lvl_font.render(f"LEVEL: {self.level}", True, WHITE)
         lvl_rect = lvl_text.get_rect(midbottom=(sx + self.width // 2, sy - 4))
         surface.blit(lvl_text, lvl_rect)
->>>>>>> b45b340b (almost done)
         self.draw_health_bar(surface, sx, sy)
         self.draw_status_effects(surface, sx, sy)
 
@@ -2125,26 +1824,14 @@ SPELLBOOK_ITEMS = {
 }
 
 WEAPON_ITEMS = {
-<<<<<<< HEAD
-=======
     "맨손": "맨손",
     "나무 지팡이": "나무 지팡이",
->>>>>>> b45b340b (almost done)
     "초급 지팡이": "초급 지팡이",
     "중급 지팡이": "중급 지팡이",
     "상급 지팡이": "상급 지팡이",
     "마나 지팡이": "마나 지팡이",
 }
 
-<<<<<<< HEAD
-MAX_SPELL_SLOTS = 4
-
-SLIME_SPELLBOOK_DROPS = [
-    ("불 마법서 (C랭크)", 50),
-    ("얼음 마법서 (C랭크)", 30),
-    ("번개 마법서 (C랭크)", 15),
-    ("물 마법서 (C랭크)", 5),
-=======
 WEAPON_DAMAGE_MULTIPLIERS = {
     "맨손": 0.8,
     "나무 지팡이": 1.0,
@@ -2169,7 +1856,6 @@ SLIME_SPELLBOOK_DROPS_S = [
     ("얼음 마법서 (S랭크)", 1),
     ("번개 마법서 (S랭크)", 1),
     ("물 마법서 (S랭크)", 1),
->>>>>>> b45b340b (almost done)
 ]
 
 
@@ -2193,12 +1879,9 @@ class ItemDrop:
         if self.item_name in SPELLBOOK_ITEMS and BOOK_IMAGE is not None:
             rect = BOOK_IMAGE.get_rect(center=(int(sx), int(sy)))
             surface.blit(BOOK_IMAGE, rect)
-<<<<<<< HEAD
-=======
         elif self.item_name in WEAPON_ITEMS and STAFF_IMAGE is not None:
             rect = STAFF_IMAGE.get_rect(center=(int(sx), int(sy)))
             surface.blit(STAFF_IMAGE, rect)
->>>>>>> b45b340b (almost done)
         else:
             pygame.draw.circle(surface, ORANGE, (int(sx), int(sy)), self.radius)
             pygame.draw.circle(surface, YELLOW, (int(sx), int(sy)), self.radius - 4)
@@ -2281,13 +1964,6 @@ def draw_target_marker(surface, camera, world_x, world_y):
     pygame.draw.circle(surface, CYAN, (sx, sy), 15, 2)
 
 
-<<<<<<< HEAD
-def character_selection():
-    male_btn = Button(300, 600, 400, 160, "남자", BLUE, (0, 150, 255))
-    female_btn = Button(900, 600, 400, 160, "여자", (255, 105, 180), (255, 150, 200))
-    while True:
-        pos, pressed = pygame.mouse.get_pos(), pygame.mouse.get_pressed()
-=======
 def show_splash_screen(duration_ms=3000):
     splash = None
     splash_path = os.path.join("img", "start.png")
@@ -2300,24 +1976,10 @@ def show_splash_screen(duration_ms=3000):
             print(f"[DEBUG] start.png 로드 실패: {e}")
     start_time = pygame.time.get_ticks()
     while pygame.time.get_ticks() - start_time < duration_ms:
->>>>>>> b45b340b (almost done)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-<<<<<<< HEAD
-        male_btn.check_hover(pos)
-        female_btn.check_hover(pos)
-        if male_btn.is_clicked(pos, pressed):
-            return 'male'
-        if female_btn.is_clicked(pos, pressed):
-            return 'female'
-        screen.fill(BLACK)
-        title_surf = get_korean_font(60).render("캐릭터 선택", True, WHITE)
-        screen.blit(title_surf, title_surf.get_rect(center=(WIDTH // 2, 150)))
-        male_btn.draw(screen)
-        female_btn.draw(screen)
-=======
         if splash:
             screen.blit(splash, (0, 0))
         else:
@@ -2446,7 +2108,6 @@ def main_menu():
             if back_btn.is_clicked(pos, pressed):
                 menu_state = "main"
 
->>>>>>> b45b340b (almost done)
         pygame.display.flip()
         clock.tick(60)
 
@@ -2666,11 +2327,7 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
     start_y = 240
     line_h = 40
     slot_title = item_font.render("슬롯 (장착 중)", True, WHITE)
-<<<<<<< HEAD
-    overlay.blit(slot_title, (left_x, start_y - 40))
-=======
     overlay.blit(slot_title, (left_x, start_y))
->>>>>>> b45b340b (almost done)
 
     for i in range(MAX_SPELL_SLOTS):
         if i < len(player.equipped_spells):
@@ -2689,19 +2346,11 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
             prefix = "  "
 
         text = item_font.render(prefix + label, True, color)
-<<<<<<< HEAD
-        overlay.blit(text, (left_x, start_y + i * line_h))
-
-    right_x = WIDTH//2 + 40
-    spell_title = item_font.render("장착 가능 마법 (미장착)", True, WHITE)
-    overlay.blit(spell_title, (right_x, start_y - 40))
-=======
         overlay.blit(text, (left_x, start_y + i * line_h + 40))
 
     right_x = WIDTH//2 + 40
     spell_title = item_font.render("장착 가능 마법 (미장착)", True, WHITE)
     overlay.blit(spell_title, (right_x, start_y))
->>>>>>> b45b340b (almost done)
 
     for idx, sid in enumerate(swap_unequipped_spells):
         name = SPELL_DISPLAY_NAMES.get(sid, sid)
@@ -2719,11 +2368,7 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
         overlay.blit(text, (right_x, start_y + idx * line_h))
 
     esc_text = small_font.render("ESC: 취소", True, LIGHT_GRAY)
-<<<<<<< HEAD
-    overlay.blit(esc_text, (WIDTH//2 - 40, HEIGHT - 80))
-=======
     overlay.blit(esc_text, (WIDTH//2 - 40, HEIGHT))
->>>>>>> b45b340b (almost done)
 
     surface.blit(overlay, (0, 0))
 
@@ -2961,10 +2606,6 @@ def use_item(player, item_name):
         equip_weapon(player, item_name)
         return
 
-<<<<<<< HEAD
-#GPT 작성
-=======
->>>>>>> b45b340b (almost done)
 def draw_skill_menu(surface, player, target_set, selected_slot):
     menu_w, menu_h = 800, 450
     menu_x = (WIDTH - menu_w) // 2
@@ -2978,12 +2619,6 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
     item_font = get_korean_font(24)
     small_font = get_korean_font(18)
 
-<<<<<<< HEAD
-    title = "무기 & 마법 선택 (E: 닫기 / 1~4: 슬롯 선택)"
-    title_surf = title_font.render(title, True, WHITE)
-    menu_surf.blit(title_surf, title_surf.get_rect(center=(menu_w // 2, 40)))
-
-=======
     title = "마법 선택 (E: 닫기 / Enter: 선택)"
     title_surf = title_font.render(title, True, WHITE)
     menu_surf.blit(title_surf, title_surf.get_rect(center=(menu_w // 2, 40)))
@@ -2991,39 +2626,21 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
     hint = small_font.render("↑/↓ 혹은 1~4로 선택, R: 슬롯 교체, M: 무기 선택 창으로", True, LIGHT_GRAY)
     menu_surf.blit(hint, (20, 80))
 
->>>>>>> b45b340b (almost done)
     if player.equipped_spells and 0 <= selected_slot < len(player.equipped_spells):
         sel_id = player.equipped_spells[selected_slot]
         sel_name = SPELL_DISPLAY_NAMES.get(sel_id, sel_id)
         sel_text = small_font.render(f"현재 선택된 마법: {selected_slot+1}번 - {sel_name}", True, YELLOW)
     else:
         sel_text = small_font.render("현재 선택된 마법: 없음", True, LIGHT_GRAY)
-<<<<<<< HEAD
-    menu_surf.blit(sel_text, (20, 80))
-
-    mp_text = f"MP: {int(player.mp)}/{player.max_mp}"
-    mp_surf = small_font.render(mp_text, True, GREEN)
-    menu_surf.blit(mp_surf, (20, 105))
-=======
     menu_surf.blit(sel_text, (20, 110))
 
     mp_text = f"MP: {int(player.mp)}/{player.max_mp}"
     mp_surf = small_font.render(mp_text, True, GREEN)
     menu_surf.blit(mp_surf, (20, 135))
->>>>>>> b45b340b (almost done)
 
     target_text = "타겟: 설정됨 (마우스로 찍음)" if target_set else "타겟: 미설정 (마우스로 찍기)"
     target_color = CYAN if target_set else LIGHT_GRAY
     target_surf = small_font.render(target_text, True, target_color)
-<<<<<<< HEAD
-    menu_surf.blit(target_surf, (20, 130))
-
-    spell_title = item_font.render("마법 슬롯 (1~4로 선택, Enter로 시전)", True, WHITE)
-    menu_surf.blit(spell_title, (40, 160))
-
-    for idx in range(MAX_SPELL_SLOTS):
-        y = 200 + idx * 50
-=======
     menu_surf.blit(target_surf, (20, 160))
 
     spell_title = item_font.render("마법 슬롯 (1~4로 선택, Enter로 시전)", True, WHITE)
@@ -3031,7 +2648,6 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
 
     for idx in range(MAX_SPELL_SLOTS):
         y = 230 + idx * 50
->>>>>>> b45b340b (almost done)
         is_selected = (idx == selected_slot)
         color = YELLOW if is_selected else WHITE
         prefix = "▶ " if is_selected else "  "
@@ -3047,14 +2663,6 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
         menu_surf.blit(text_surf, (40, y))
 
     weapon_title = item_font.render("현재 무기", True, WHITE)
-<<<<<<< HEAD
-    menu_surf.blit(weapon_title, (menu_w // 2 + 40, 200))
-    text = f"{player.weapon}"
-    text_surf = item_font.render(text, True, WHITE)
-    menu_surf.blit(text_surf, (menu_w // 2 + 40, 240))
-    small = small_font.render("(무기 교체는 인벤토리에서 무기 사용)", True, LIGHT_GRAY)
-    menu_surf.blit(small, (menu_w // 2 + 40, 270))
-=======
     menu_surf.blit(weapon_title, (menu_w // 2 + 40, 230))
     text = f"{player.weapon}"
     text_surf = item_font.render(text, True, WHITE)
@@ -3099,7 +2707,6 @@ def draw_weapon_menu(surface, player, available_weapons, selected_index):
         text = f"{prefix}{idx+1}. {weapon_name} x{player.inventory.get(weapon_name, 0) if weapon_name != '맨손' else '-'}"
         text_surf = item_font.render(text, True, color)
         menu_surf.blit(text_surf, (40, y))
->>>>>>> b45b340b (almost done)
 
     surface.blit(menu_surf, (menu_x, menu_y))
 
@@ -3193,11 +2800,7 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
         if not recorded_chunks:
             return
         audio = np.concatenate(recorded_chunks, axis=0)
-<<<<<<< HEAD
-        filename = os.path.join(SPELL_SOUND_DIR, f"{spell_id}.wav")
-=======
         filename = os.path.join(SPELL_SOUND_DIR, f"1331_황정빈{spell_id}.wav")
->>>>>>> b45b340b (almost done)
         try:
             sf.write(filename, audio, samplerate)
             current_sound = pygame.mixer.Sound(filename)
@@ -3319,11 +2922,7 @@ def record_spell_sound_ui(spell_id):
     pygame.display.flip()
     pygame.time.wait(1000)
 
-<<<<<<< HEAD
-    filename = os.path.join(SPELL_SOUND_DIR, f"{spell_id}.wav")
-=======
     filename = os.path.join(SPELL_SOUND_DIR, f"1331_황정빈{spell_id}.wav")
->>>>>>> b45b340b (almost done)
     record_audio_to_file(filename, duration=duration, samplerate=44100)
 
     overlay.fill(BLACK)
@@ -3378,11 +2977,7 @@ def open_sound_edit_menu(player):
                     selected = (selected + 1) % len(spell_ids)
                 elif event.key == pygame.K_ESCAPE:
                     return False
-<<<<<<< HEAD
-                elif event.key == pygame.K_SPACE or (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1):
-=======
                 elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
->>>>>>> b45b340b (almost done)
                     spell_id = spell_ids[selected]
                     display_name = SPELL_DISPLAY_NAMES.get(spell_id, spell_id)
                     existing_sound = player.spell_sounds.get(spell_id)
@@ -3392,8 +2987,6 @@ def open_sound_edit_menu(player):
                         return True
                     else:
                         print("[소리 교환권] 주문 소리 변경이 취소되었습니다.")
-<<<<<<< HEAD
-=======
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 spell_id = spell_ids[selected]
                 display_name = SPELL_DISPLAY_NAMES.get(spell_id, spell_id)
@@ -3404,7 +2997,6 @@ def open_sound_edit_menu(player):
                     return True
                 else:
                     print("[소리 교환권] 주문 소리 변경이 취소되었습니다.")
->>>>>>> b45b340b (almost done)
 
         overlay = pygame.Surface((WIDTH, HEIGHT))
         overlay.set_alpha(230)
@@ -3451,25 +3043,6 @@ ITEM_USE_FUNCTIONS["소리 교환권"] = use_sound_ticket
 
 
 def map_transition_effect(text="맵 이동 중..."):
-<<<<<<< HEAD
-    fade_surf = pygame.Surface((WIDTH, HEIGHT))
-    fade_surf.fill(BLACK)
-    font = get_korean_font(50)
-    text_surf = font.render(text, True, WHITE)
-    text_rect = text_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    for alpha in range(0, 256, 15):
-        fade_surf.set_alpha(alpha)
-        screen.blit(fade_surf, (0, 0))
-        screen.blit(text_surf, text_rect)
-        pygame.display.flip()
-        clock.tick(30)
-    pygame.time.wait(200)
-    for alpha in range(255, -1, -15):
-        fade_surf.set_alpha(alpha)
-        screen.fill(BLACK)
-        screen.blit(fade_surf, (0, 0))
-        pygame.display.flip()
-=======
     bg = None
     start_path = os.path.join("img", "start.png")
     if os.path.exists(start_path):
@@ -3497,33 +3070,22 @@ def map_transition_effect(text="맵 이동 중..."):
             screen.fill(BLACK)
         screen.blit(text_surf, text_rect)
         pygame.display.flip()
->>>>>>> b45b340b (almost done)
         clock.tick(60)
 
 
 
 def main():
     global VOLUME
-<<<<<<< HEAD
-    gender = character_selection()
-=======
     gender = main_menu()
->>>>>>> b45b340b (almost done)
 
     game_maps = {}
     show_inventory = False
     show_skill_menu = False
-<<<<<<< HEAD
-    xp_orbs = []
-    item_drops = []
-    selected_spell_slot = 0
-=======
     show_weapon_menu = False
     xp_orbs = []
     item_drops = []
     selected_spell_slot = 0
     selected_weapon_index = 0
->>>>>>> b45b340b (almost done)
     auto_targeting = False
     show_setting = False
 
@@ -3536,10 +3098,7 @@ def main():
     swap_selected_slot = 0
     swap_selected_index = 0
     swap_unequipped_spells = []
-<<<<<<< HEAD
-=======
     available_weapons = []
->>>>>>> b45b340b (almost done)
 
     if os.path.exists("house.tmx") and os.path.exists("map.tmx"):
         try:
@@ -3575,19 +3134,8 @@ def main():
     camera = Camera(WIDTH, HEIGHT)
 
     def update_camera_offset():
-<<<<<<< HEAD
-        if current_map and current_map.tiled_map:
-            map_w = current_map.tiled_map.pixel_w
-            map_h = current_map.tiled_map.pixel_h
-            camera.offset_x = max(0, (WIDTH - map_w) // 2)
-            camera.offset_y = max(0, (HEIGHT - map_h) // 2)
-        else:
-            camera.offset_x = 0
-            camera.offset_y = 0
-=======
         camera.offset_x = 0
         camera.offset_y = 0
->>>>>>> b45b340b (almost done)
 
     player_spells, enemy_projectiles = [], []
     target_position = None
@@ -3597,8 +3145,6 @@ def main():
         "dummy": lambda x, y, level=None: Dummy(x, y),
     }
 
-<<<<<<< HEAD
-=======
     def collect_available_weapons():
         pool = set(["맨손", player.weapon])
         for name, count in player.inventory.items():
@@ -3607,7 +3153,6 @@ def main():
         weapons = sorted(list(pool), key=lambda w: (w != "맨손", w))
         return weapons
 
->>>>>>> b45b340b (almost done)
     def spawn_enemies_on_map(cmap):
         if cmap and not cmap.enemies_spawned:
             enemy_spawns = cmap.tiled_map.find_enemy_spawns()
@@ -3620,12 +3165,9 @@ def main():
     fireball_intro_done = False
     running = True
 
-<<<<<<< HEAD
-=======
     def get_xp_reward(enemy_level):
         return xp_needed_for_level(enemy_level) // 4
 
->>>>>>> b45b340b (almost done)
     while running:
         clock.tick(60)
 
@@ -3672,21 +3214,12 @@ def main():
                     if show_inventory:
                         show_skill_menu = False
                         show_setting = False
-<<<<<<< HEAD
-=======
                         show_weapon_menu = False
->>>>>>> b45b340b (almost done)
                 elif event.key == pygame.K_e:
                     show_skill_menu = not show_skill_menu
                     if show_skill_menu:
                         show_inventory = False
                         show_setting = False
-<<<<<<< HEAD
-                elif event.key == pygame.K_ESCAPE and (show_inventory or show_skill_menu or show_setting):
-                    show_inventory = False
-                    show_skill_menu = False
-                    show_setting = False
-=======
                         show_weapon_menu = False
                 elif event.key == pygame.K_n:
                     show_weapon_menu = True
@@ -3731,7 +3264,6 @@ def main():
                     show_skill_menu = False
                     show_setting = False
                     show_weapon_menu = False
->>>>>>> b45b340b (almost done)
                 elif event.key == pygame.K_ESCAPE:
                     show_setting = not show_setting
 
@@ -3766,31 +3298,6 @@ def main():
                             selected_spell_slot = (selected_spell_slot + 1) % len(player.equipped_spells)
                         continue
 
-<<<<<<< HEAD
-                    if event.key == pygame.K_m and not show_swap_menu:
-                        spells = list(player.known_spells.keys())
-                        equipped_set = set(player.equipped_spells[:MAX_SPELL_SLOTS])
-                        swap_unequipped_spells = [sid for sid in spells if sid not in equipped_set]
-
-                        if not swap_unequipped_spells:
-                            overlay = pygame.Surface((WIDTH, HEIGHT))
-                            overlay.set_alpha(220)
-                            overlay.fill(BLACK)
-                            font = get_korean_font(32)
-                            small = get_korean_font(20)
-                            t1 = font.render("장착되지 않은 마법이 없습니다.", True, WHITE)
-                            t2 = small.render("새로 끼울 마법이 없습니다.", True, LIGHT_GRAY)
-                            overlay.blit(t1, t1.get_rect(center=(WIDTH//2, HEIGHT//2 - 20)))
-                            overlay.blit(t2, t2.get_rect(center=(WIDTH//2, HEIGHT//2 + 20)))
-                            screen.blit(overlay, (0, 0))
-                            pygame.display.flip()
-                            pygame.time.wait(1000)
-                        else:
-                            show_swap_menu = True
-                            swap_phase = 0
-                            swap_selected_slot = selected_spell_slot
-                            swap_selected_index = 0
-=======
                 if show_weapon_menu:
                     available_weapons = collect_available_weapons()
                     if not available_weapons:
@@ -3813,7 +3320,6 @@ def main():
                         if available_weapons:
                             player.weapon = available_weapons[selected_weapon_index]
                         show_weapon_menu = False
->>>>>>> b45b340b (almost done)
                         continue
 
                 if pygame.K_1 <= event.key <= pygame.K_4:
@@ -3875,10 +3381,7 @@ def main():
         keys = pygame.key.get_pressed()
         player.move(keys, current_map.tiled_map if current_map else None)
         player.regen_mp()
-<<<<<<< HEAD
-=======
         player.regen_hp()
->>>>>>> b45b340b (almost done)
 
         camera.update(player)
         if current_map:
@@ -3917,10 +3420,6 @@ def main():
                         break
                     if target_name not in game_maps:
                         break
-<<<<<<< HEAD
-                    target_map = game_maps[target_name]
-                    sx, sy = target_map.tiled_map.find_player_spawn()
-=======
 
                     target_map = game_maps[target_name]
 
@@ -3928,7 +3427,6 @@ def main():
                     target_spawn = portal.get("target_spawn", "")
                     sx, sy = target_map.tiled_map.find_named_spawn(target_spawn)
 
->>>>>>> b45b340b (almost done)
                     player.x, player.y = sx, sy
                     map_transition_effect(f"{target_name}(으)로 이동!")
                     current_map_name = target_name
@@ -3939,37 +3437,16 @@ def main():
                     target_position = None
                     item_drops.clear()
                     spawn_enemies_on_map(current_map)
-<<<<<<< HEAD
-
-=======
->>>>>>> b45b340b (almost done)
                     if current_map_name == "map" and not fireball_intro_done:
                         show_fireball_intro_and_record(player)
                         fireball_intro_done = True
                     break
-<<<<<<< HEAD
-
-=======
->>>>>>> b45b340b (almost done)
         if current_map:
             for enemy in current_map.enemies[:]:
                 enemy.update(player, current_map.tiled_map, enemy_projectiles, current_map.damage_texts)
 
                 if isinstance(enemy, Slime):
                     if enemy.death_finished:
-<<<<<<< HEAD
-                        drop_x = enemy.x + enemy.width / 2
-                        drop_y = enemy.y + enemy.height / 2
-                        level = getattr(enemy, "level", 1)
-                        xp_value = 5 + 5 * level * (1.1 ** level)
-                        xp_orbs.append(XPOrb(drop_x, drop_y, value=xp_value))
-
-                        if random.random() < 0.5:
-                            names = [item[0] for item in SLIME_SPELLBOOK_DROPS]
-                            weights = [item[1] for item in SLIME_SPELLBOOK_DROPS]
-                            item_name = random.choices(names, weights=weights, k=1)[0]
-                            item_drops.append(ItemDrop(drop_x, drop_y, item_name))
-=======
                         drop_x = enemy.x + enemy.width/2
                         drop_y = enemy.y + enemy.height/2
                         level = getattr(enemy, "level", 1)
@@ -4010,7 +3487,6 @@ def main():
                                 weights = [item[1] for item in pool]
                                 item_name = random.choices(names, weights=weights, k=1)[0]
                                 item_drops.append(ItemDrop(drop_x, drop_y, item_name))
->>>>>>> b45b340b (almost done)
 
                         if random.random() < 0.05:
                             item_drops.append(ItemDrop(drop_x, drop_y, "소리 교환권"))
@@ -4078,31 +3554,6 @@ def main():
             if current_map:
                 for enemy in current_map.enemies:
                     if math.hypot(
-<<<<<<< HEAD
-                        spell.x - (enemy.x + enemy.width / 2),
-                        spell.y - (enemy.y + enemy.height / 2)
-                    ) < spell.radius + enemy.width / 2:
-                        enemy.hp -= spell.damage
-                        current_map.damage_texts.append(DamageText(
-                            enemy.x + enemy.width / 2,
-                            enemy.y,
-                            spell.damage
-                        ))
-
-                        if spell.spell_type == "fireball":
-                            enemy.apply_burn(duration=600, total_damage=50)
-                        elif spell.spell_type == "ice_lans":
-                            enemy.apply_ice_hit()
-                        elif spell.spell_type == "lightning_bolt":
-                            chain = LightningChain(
-                                enemy.x + enemy.width / 2,
-                                enemy.y + enemy.height / 2,
-                                spell.damage * 0.7,
-                                [id(enemy)]
-                            )
-                            current_map.lightning_chains.append(chain)
-                            print(f"[번개] 체인 생성!")
-=======
                         spell.x - (enemy.x + enemy.width/2),
                         spell.y - (enemy.y + enemy.height/2)
                     ) < spell.radius + enemy.width/2:
@@ -4138,17 +3589,13 @@ def main():
                             )
                             current_map.lightning_chains.append(chain)
 
->>>>>>> b45b340b (almost done)
                         elif spell.spell_type == "water_blast":
                             enemy.apply_slow(duration=300)
 
                         spell.active = False
                         break
 
-<<<<<<< HEAD
-=======
 
->>>>>>> b45b340b (almost done)
         for proj in enemy_projectiles[:]:
             proj.update()
             if not proj.active:
@@ -4231,14 +3678,11 @@ def main():
 
         if show_skill_menu:
             draw_skill_menu(screen, player, target_position is not None, selected_spell_slot)
-<<<<<<< HEAD
-=======
         if show_weapon_menu:
             available_weapons = collect_available_weapons()
             if not available_weapons:
                 available_weapons = ["맨손"]
             draw_weapon_menu(screen, player, available_weapons, selected_weapon_index)
->>>>>>> b45b340b (almost done)
 
         if show_swap_menu:
             draw_swap_menu(
@@ -4258,8 +3702,4 @@ def main():
 
 if __name__ == "__main__":
     load_slime_frames()
-<<<<<<< HEAD
     main()
-=======
-    main()
->>>>>>> b45b340b (almost done)
