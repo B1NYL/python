@@ -1,5 +1,9 @@
 import subprocess
 import sys
+import urllib.request
+import zipfile
+import io
+import shutil
 
 def install_if_missing(package):
     try:
@@ -40,6 +44,40 @@ pygame.mixer.music.set_volume(VOLUME)
 SPELL_SOUND_DIR = "spell_sounds"
 os.makedirs(SPELL_SOUND_DIR, exist_ok=True)
 
+def ensure_repo_assets():
+    """
+    필요한 게임 자산이 없으면 GitHub 원격(main 브랜치 ZIP)을 받아
+    현재 경로에 존재하지 않는 파일만 풀어둡니다.
+    """
+    required_paths = ["house.tmx", "map.tmx", "img"]
+    if all(os.path.exists(p) for p in required_paths):
+        return
+
+    zip_url = "https://github.com/B1NYL/python/archive/refs/heads/main.zip"
+    try:
+        print("[INFO] 게임 자산 다운로드 중...")
+        with urllib.request.urlopen(zip_url) as resp:
+            data = resp.read()
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            root = zf.namelist()[0].split("/")[0]  # 아카이브 최상위 폴더명
+            for member in zf.namelist():
+                if not member.startswith(root + "/"):
+                    continue
+                rel_path = member[len(root) + 1 :]
+                if not rel_path or member.endswith("/"):
+                    continue
+                dest = os.path.join(os.getcwd(), rel_path)
+                if os.path.exists(dest):
+                    continue  # 이미 있는 파일은 덮어쓰지 않음
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                with zf.open(member) as src, open(dest, "wb") as dst:
+                    shutil.copyfileobj(src, dst)
+        print("[INFO] 자산 다운로드 완료")
+    except Exception as e:
+        print(f"[WARN] 자산 다운로드 실패: {e}")
+
+ensure_repo_assets()
+
 WIDTH, HEIGHT = 1600, 1200
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Voice RPG")
@@ -66,20 +104,22 @@ if os.path.exists("img/book.png"):
     try:
         img = pygame.image.load("img/book.png").convert_alpha()
         BOOK_IMAGE = pygame.transform.scale(img, (36, 36))
-        print("[DEBUG] book.png 로드 완료")
     except Exception as e:
-        print(f"[DEBUG] book.png 로드 실패: {e}")
+        print(f"book 버그 {e}")
 else:
-    print("[DEBUG] img/book.png 를 찾을 수 없습니다.")
+    print("그런 파일 업슨")
+
 
 STAFF_IMAGE = None
-if os.path.exists("img/jipang.jpg"):
+if os.path.exists("img/stick.png"):
     try:
-        img = pygame.image.load("img/jipang.jpg").convert()
-        STAFF_IMAGE = pygame.transform.scale(img, (42, 42))
-        print("[DEBUG] jipang.jpg 로드 완료")
+        img = pygame.image.load("img/stick.png").convert_alpha()
+        STAFF_IMAGE = pygame.transform.scale(img, (52, 52))
     except Exception as e:
-        print(f"[DEBUG] jipang.jpg 로드 실패: {e}")
+         print(f"stick 버그 {e}")
+
+else:
+    print('그런 파일 업슨')
 
 SLIME_STAND_FRAMES = []
 SLIME_STAND_DELAYS = [200, 300, 250]
@@ -302,14 +342,13 @@ class TiledMap:
             return self.find_player_spawn()
 
         sname = spawn_name.strip().lower()
-
+        #아직 안되긴 하는데 일단 놔둠. 실행에는 문제없음
         for obj in self.tmx.objects:
             props = getattr(obj, "properties", {}) or {}
             name  = (getattr(obj, "name", "") or "").strip().lower()
             otype = (getattr(obj, "type", "") or "").strip().lower()
             prop_keys = [k.strip().lower() for k in props.keys()]
 
-            # 🔥 1) 이름, 2) 타입, 3) 프로퍼티 이름 중 하나라도 sname 이면 매칭
             if (
                 name == sname or
                 otype == sname or
@@ -317,10 +356,8 @@ class TiledMap:
             ):
                 x = int(obj.x * self.scale)
                 y = int(obj.y * self.scale)
-                print(f"[DEBUG] 스폰 '{spawn_name}' 발견: name='{name}', type='{otype}', props={props}, pos=({x},{y})")
                 return x, y
 
-        print(f"[DEBUG] 스폰 '{spawn_name}'을(를) 찾지 못해 기본 스폰(player_spawn) 사용")
         return self.find_player_spawn()
 
     def find_enemy_spawns(self):
@@ -395,6 +432,30 @@ class TiledMap:
                 print(f"portal_type={p['portal_type']},target_spawn={p['target_spawn']},rect={p['rect']}")
             return portals
 
+    def find_quest_objects(self):
+        """quest 커스텀 속성이 있는 오브젝트 위치 반환."""
+        quests = []
+        for layer in self.tmx.layers:
+            if hasattr(layer, "tiles") or hasattr(layer, "data"):
+                continue
+            try:
+                iterator = iter(layer)
+            except TypeError:
+                continue
+            for obj in iterator:
+                props = getattr(obj, "properties", {}) or {}
+                if "quest" not in props:
+                    continue
+                try:
+                    qx = int(obj.x * self.scale)
+                    qy = int(obj.y * self.scale)
+                except Exception as e:
+                    print(f"[DEBUG] quest 오브젝트 좌표 변환 실패: {e}")
+                    continue
+                quests.append((qx, qy))
+        print(f"[DEBUG] 퀘스트 오브젝트 {len(quests)}개 발견 (파일: {getattr(self.tmx, 'filename', 'unknown')})")
+        return quests
+
 
 
 class DamageText:
@@ -436,14 +497,15 @@ def xp_needed_for_level(level: int) -> int:
     return max(1, int(5 * (level ** 2) + 20 * level + 100))
 
 def slime_max_hp_for_level(level: int) -> int:
-    base_hp = 30
-    hp_per_level = 15
+    base_hp = 50
+    hp_per_level = 40  # 레벨이 오를수록 훨씬 크게 상승
     return base_hp + hp_per_level * max(0, level - 1)
 
 
 class Player:
     def __init__(self, x, y, gender='male'):
         self.x, self.y = x, y
+        self.gender = gender
         self.width, self.height = PLAYER_SIZE, PLAYER_SIZE
         self.speed = 5
         self.hp_regen = 0.025
@@ -470,8 +532,8 @@ class Player:
         # self.equipped_spells.append("iceberg")
         # self.known_spells["meteor"] = "S"
         # self.equipped_spells.append("meteor")
-        self.known_spells["thunder"] = "S"
-        self.equipped_spells.append("thunder")
+        # self.known_spells["thunder"] = "S"
+        # self.equipped_spells.append("thunder")
         # self.known_spells["backflow"] = "S"
         # self.equipped_spells.append("backflow")
 
@@ -479,8 +541,8 @@ class Player:
         self.equipped_spells.append("fireball")
         # self.known_spells["ice_lans"] = "C"
         # self.equipped_spells.append("ice_lans")
-        self.known_spells["lightning_bolt"] = "C"
-        self.equipped_spells.append("lightning_bolt")
+        # self.known_spells["lightning_bolt"] = "C"
+        # self.equipped_spells.append("lightning_bolt")
         # self.known_spells["water_blast"] = "C"
         # self.equipped_spells.append("water_blast")
 
@@ -1935,6 +1997,7 @@ class GameMap:
         self.lightning_chains = []
         self.damage_texts = []
         self.area_effects = []
+        self.quest_npcs = []
         print(f"[DEBUG] GameMap '{self.name}' 포탈 수: {len(self.portals)}")
 
 
@@ -1963,13 +2026,27 @@ def draw_target_marker(surface, camera, world_x, world_y):
     pygame.draw.line(surface, CYAN, (sx, sy - pulse), (sx, sy + pulse), 2)
     pygame.draw.circle(surface, CYAN, (sx, sy), 15, 2)
 
+def is_on_screen(entity, camera, margin=200):
+    """카메라 화면(여유 margin) 안에 있으면 True."""
+    view_rect = pygame.Rect(camera.x - margin, camera.y - margin, WIDTH + margin * 2, HEIGHT + margin * 2)
+    ent_rect = pygame.Rect(entity.x, entity.y, getattr(entity, "width", 0), getattr(entity, "height", 0))
+    return view_rect.colliderect(ent_rect)
+
+def distance_between(a, b):
+    """엔티티 a와 b 중심 사이의 거리."""
+    ax = a.x + getattr(a, "width", 0) / 2
+    ay = a.y + getattr(a, "height", 0) / 2
+    bx = b.x + getattr(b, "width", 0) / 2
+    by = b.y + getattr(b, "height", 0) / 2
+    return math.hypot(ax - bx, ay - by)
+
 
 def show_splash_screen(duration_ms=3000):
     splash = None
     splash_path = os.path.join("img", "start.png")
     if os.path.exists(splash_path):
         try:
-            img = pygame.image.load(splash_path).convert()
+            img = pygame.image.load(splash_path).convert_alpha()
             splash = pygame.transform.scale(img, (WIDTH, HEIGHT))
             print("[DEBUG] start.png 로드 성공")
         except Exception as e:
@@ -2008,7 +2085,7 @@ def main_menu():
     bg_path = os.path.join("img", "background.png")
     if os.path.exists(bg_path):
         try:
-            raw_bg = pygame.image.load(bg_path).convert()
+            raw_bg = pygame.image.load(bg_path).convert_alpha()
             bg_img = pygame.transform.scale(raw_bg, (WIDTH, HEIGHT))
             print("[DEBUG] background.png 로드 성공")
         except Exception as e:
@@ -2052,6 +2129,24 @@ def main_menu():
                     else:
                         pygame.quit()
                         exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if menu_state == "main":
+                    if start_btn.rect.collidepoint(event.pos):
+                        return selected_gender
+                    if custom_btn.rect.collidepoint(event.pos):
+                        menu_state = "custom"
+                    if desc_btn.rect.collidepoint(event.pos):
+                        menu_state = "desc"
+                elif menu_state == "desc":
+                    if back_btn.rect.collidepoint(event.pos):
+                        menu_state = "main"
+                elif menu_state == "custom":
+                    if man_btn.rect.collidepoint(event.pos):
+                        selected_gender = "male"
+                    if woman_btn.rect.collidepoint(event.pos):
+                        selected_gender = "female"
+                    if back_btn.rect.collidepoint(event.pos):
+                        menu_state = "main"
         if bg_img:
             screen.blit(bg_img, (0, 0))
         else:
@@ -3047,7 +3142,7 @@ def map_transition_effect(text="맵 이동 중..."):
     start_path = os.path.join("img", "start.png")
     if os.path.exists(start_path):
         try:
-            img = pygame.image.load(start_path).convert()
+            img = pygame.image.load(start_path).convert_alpha()
             bg = pygame.transform.scale(img, (WIDTH, HEIGHT))
             print("[DEBUG] start.png (맵 전환) 로드 성공")
         except Exception as e:
@@ -3099,6 +3194,11 @@ def main():
     swap_selected_index = 0
     swap_unequipped_spells = []
     available_weapons = []
+    quest_active = False
+    quest_kill_target = None
+    quest_kill_count = 0
+    quest_npc_interact_range = 80
+    quest_final_complete = False
 
     if os.path.exists("house.tmx") and os.path.exists("map.tmx"):
         try:
@@ -3145,6 +3245,52 @@ def main():
         "dummy": lambda x, y, level=None: Dummy(x, y),
     }
 
+    def get_stand_image_for_gender(gender):
+        fname = f"img/{'man' if gender=='male' else 'woman'}_down_2.png"
+        size = PLAYER_SIZE
+        if os.path.exists(fname):
+            try:
+                img = pygame.image.load(fname).convert_alpha()
+                return pygame.transform.scale(img, (size, size))
+            except Exception as e:
+                print(f"[DEBUG] {fname} 로드 실패: {e}")
+        surf = pygame.Surface((size, size), pygame.SRCALPHA)
+        color = BLUE if gender == "male" else (255, 105, 180)
+        surf.fill(color)
+        return surf
+
+    def setup_quest_npcs_for_all_maps():
+        opposite_gender = "female" if player.gender == "male" else "male"
+        npc_image = get_stand_image_for_gender(opposite_gender)
+        for gm in game_maps.values():
+            gm.quest_npcs = []
+            for qx, qy in gm.tiled_map.find_quest_objects():
+                gm.quest_npcs.append({"x": qx, "y": qy, "img": npc_image})
+            print(f"[DEBUG] 맵 '{gm.name}'에 퀘스트 NPC {len(gm.quest_npcs)}개 배치 (opposite_gender={opposite_gender})")
+
+    def next_quest_target(current_target):
+        if current_target is None:
+            return 5
+        return min(200, current_target + 5)
+
+    def grant_quest_reward(player):
+        """현재 레벨 기준 약 1.5레벨 분량의 XP 지급."""
+        remaining = 1.5
+        xp_gain = 0
+        # 첫 부분: 현재 레벨 xp_to_next 기준
+        part = min(1.0, remaining)
+        xp_gain += int(player.xp_to_next * part)
+        remaining -= part
+        temp_level = player.level + 1
+        while remaining > 1e-6:
+            xp_need = xp_needed_for_level(temp_level)
+            part = min(1.0, remaining)
+            xp_gain += int(xp_need * part)
+            remaining -= part
+            temp_level += 1
+        print(f"[퀘스트 보상] XP {xp_gain} 지급 (약 1.5레벨 상승분)")
+        player.add_xp(xp_gain)
+
     def collect_available_weapons():
         pool = set(["맨손", player.weapon])
         for name, count in player.inventory.items():
@@ -3166,7 +3312,42 @@ def main():
     running = True
 
     def get_xp_reward(enemy_level):
-        return xp_needed_for_level(enemy_level) // 4
+        return max(1, xp_needed_for_level(enemy_level) // 6)  # XP 조금 줄임
+
+    # 퀘스트 NPC 위치 셋업 (플레이어 생성 후)
+    setup_quest_npcs_for_all_maps()
+
+    def draw_quest_status(surface):
+        """우측 상단에 현재 퀘스트 진행 상황 표시."""
+        status_font = get_korean_font(22)
+        small_font = get_korean_font(18)
+        padding = 16
+        panel_w = 320
+        panel_h = 72
+        x = WIDTH - panel_w - padding
+        y = padding
+        panel = pygame.Surface((panel_w, panel_h), pygame.SRCALPHA)
+        panel.fill((0, 0, 0, 140))
+        pygame.draw.rect(panel, WHITE, (0, 0, panel_w, panel_h), 2)
+
+        if quest_final_complete:
+            title = "퀘스트 완료"
+            desc = "축하합니다 용사님!"
+            color = YELLOW
+        elif quest_active and quest_kill_target:
+            title = "진행 중 퀘스트"
+            desc = f"슬라임 {quest_kill_count}/{quest_kill_target} 마리 처치"
+            color = CYAN
+        else:
+            title = "퀘스트 없음"
+            desc = "NPC에게서 퀘스트를 받으세요 (!)"
+            color = ORANGE
+
+        t1 = status_font.render(title, True, color)
+        t2 = small_font.render(desc, True, WHITE)
+        panel.blit(t1, (12, 10))
+        panel.blit(t2, (12, 40))
+        surface.blit(panel, (x, y))
 
     while running:
         clock.tick(60)
@@ -3271,6 +3452,26 @@ def main():
                     auto_targeting = not auto_targeting
                     if not auto_targeting:
                         target_position = None
+
+                # NPC 상호작용 (F키)
+                if event.key == pygame.K_f and current_map:
+                    interacted = False
+                    for npc in current_map.quest_npcs:
+                        dummy_ent = type("E", (), {"x": npc["x"], "y": npc["y"], "width": PLAYER_SIZE, "height": PLAYER_SIZE})()
+                        if distance_between(dummy_ent, player) <= quest_npc_interact_range:
+                            interacted = True
+                            if quest_final_complete:
+                                print("[퀘스트] 이미 최종 퀘스트를 완료했습니다.")
+                            elif quest_active:
+                                print(f"[퀘스트 진행 중] 슬라임 {quest_kill_count}/{quest_kill_target}마리")
+                            else:
+                                quest_active = True
+                                quest_kill_count = 0
+                                quest_kill_target = next_quest_target(quest_kill_target)
+                                print(f"[퀘스트 수락] 슬라임 {quest_kill_target}마리 처치")
+                            break
+                    if not interacted and current_map.quest_npcs:
+                        print("[퀘스트] NPC가 너무 멀리 있어 상호작용할 수 없습니다.")
 
                 if show_inventory:
                     if pygame.K_1 <= event.key <= pygame.K_9:
@@ -3443,7 +3644,9 @@ def main():
                     break
         if current_map:
             for enemy in current_map.enemies[:]:
-                enemy.update(player, current_map.tiled_map, enemy_projectiles, current_map.damage_texts)
+                # 화면에 가까운 적만 업데이트해 성능 부담 감소
+                if is_on_screen(enemy, camera, margin=180):
+                    enemy.update(player, current_map.tiled_map, enemy_projectiles, current_map.damage_texts)
 
                 if isinstance(enemy, Slime):
                     if enemy.death_finished:
@@ -3469,6 +3672,7 @@ def main():
                             staff_candidates.append("마나 지팡이")
 
                         staff_dropped = False
+                        book_dropped = False
                         for staff in staff_candidates:
                             if random.random() < 0.04:
                                 item_drops.append(ItemDrop(drop_x, drop_y, staff))
@@ -3483,13 +3687,28 @@ def main():
                             else:
                                 pool = None
                             if pool:
+                                book_dropped = True
                                 names = [item[0] for item in pool]
                                 weights = [item[1] for item in pool]
                                 item_name = random.choices(names, weights=weights, k=1)[0]
                                 item_drops.append(ItemDrop(drop_x, drop_y, item_name))
 
-                        if random.random() < 0.05:
+                        if (not staff_dropped) and (not book_dropped) and random.random() < 0.05:
                             item_drops.append(ItemDrop(drop_x, drop_y, "소리 교환권"))
+
+                        # 퀘스트 진행도 업데이트
+                        if quest_active:
+                            quest_kill_count += 1
+                            print(f"[퀘스트] 슬라임 처치 {quest_kill_count}/{quest_kill_target}")
+                            if quest_kill_count >= quest_kill_target:
+                                print(f"[퀘스트 완료] 슬라임 {quest_kill_target}마리 처치")
+                                grant_quest_reward(player)
+                                quest_active = False
+                                if quest_kill_target >= 200:
+                                    quest_final_complete = True
+                                else:
+                                    quest_kill_target = next_quest_target(quest_kill_target)
+                                quest_kill_count = 0
 
                         respawn_delay = 300
                         etype = enemy.enemy_type
@@ -3633,6 +3852,25 @@ def main():
 
         if current_map:
             current_map.tiled_map.draw(screen, camera)
+            # 퀘스트 NPC 표시 (플레이어와 반대 성별 스탠딩 이미지)
+            for npc in current_map.quest_npcs:
+                if is_on_screen(type("E", (), {"x": npc["x"], "y": npc["y"], "width": PLAYER_SIZE, "height": PLAYER_SIZE})(), camera, margin=150):
+                    nx, ny = camera.apply_pos(npc["x"], npc["y"])
+                    screen.blit(npc["img"], (nx, ny))
+                    # 머리 위 표시: 퀘스트 상태에 따라 ! / 진행도 / 최종 완료 메시지
+                    indicator_font = get_korean_font(18)
+                    if quest_final_complete:
+                        text = "축하합니다 용사님!"
+                        color = YELLOW
+                    elif quest_active:
+                        text = f"{quest_kill_count}/{quest_kill_target}"
+                        color = CYAN
+                    else:
+                        text = "!"
+                        color = ORANGE
+                    txt = indicator_font.render(text, True, color)
+                    txt_rect = txt.get_rect(midbottom=(nx + PLAYER_SIZE // 2, ny - 8))
+                    screen.blit(txt, txt_rect)
             for eff in current_map.area_effects:
                 eff.draw(screen, camera)
 
@@ -3643,7 +3881,8 @@ def main():
 
         if current_map:
             for enemy in current_map.enemies:
-                enemy.draw(screen, camera)
+                if is_on_screen(enemy, camera, margin=120):
+                    enemy.draw(screen, camera)
             for chain in current_map.lightning_chains:
                 chain.draw(screen, camera)
             for dmg_text in current_map.damage_texts:
@@ -3667,6 +3906,7 @@ def main():
 
         if current_map:
             draw_ui(screen, player, current_map, target_position is not None)
+            draw_quest_status(screen)
 
         if show_inventory:
             draw_inventory(screen, player)
