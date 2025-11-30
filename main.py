@@ -55,7 +55,7 @@ def ensure_repo_assets():
 
     zip_url = "https://github.com/B1NYL/python/archive/refs/heads/main.zip"
     try:
-        print("[INFO] 게임 자산 다운로드 중...")
+        print("[INFO] 게임 자산 다운로드 중... 길면 약 1~2분 소요될 수 있습니다. 파일이 좀 많이 커요ㅠ")
         with urllib.request.urlopen(zip_url) as resp:
             data = resp.read()
         with zipfile.ZipFile(io.BytesIO(data)) as zf:
@@ -235,7 +235,6 @@ class Camera:
         self.x = int(target.x - WIDTH // 2 + target.width // 2)
         self.y = int(target.y - HEIGHT // 2 + target.height // 2)
 
-    #보정
     def apply(self, entity):
         return int(entity.x - self.x + self.offset_x), int(entity.y - self.y + self.offset_y)
 
@@ -314,7 +313,7 @@ class TiledMap:
 
     def find_player_spawn(self):
         """기본 스폰 위치: player_spawn 이라는 이름/속성/프로퍼티 가진 오브젝트."""
-        for obj in self.tmx.objects:  # TMX 안 모든 오브젝트 훑기
+        for obj in self.tmx.objects:  
             props = getattr(obj, "properties", {}) or {}
             name = (getattr(obj, "name", "") or "").strip().lower()
             otype = (getattr(obj, "type", "") or "").strip().lower()
@@ -329,10 +328,8 @@ class TiledMap:
             ):
                 x = int(obj.x * self.scale)
                 y = int(obj.y * self.scale)
-                print(f"[DEBUG] 기본 스폰(player_spawn) 발견: name='{name}', type='{otype}', props={props}, pos=({x},{y})")
                 return x, y
 
-        print("[DEBUG] 기본 스폰(player_spawn)을 찾지 못했습니다. (0,0)으로 이동")
         return 0, 0
 
     def find_named_spawn(self, spawn_name):
@@ -342,7 +339,7 @@ class TiledMap:
             return self.find_player_spawn()
 
         sname = spawn_name.strip().lower()
-        #아직 안되긴 하는데 일단 놔둠. 실행에는 문제없음
+        #왜안되는지 아직도 모르겠음
         for obj in self.tmx.objects:
             props = getattr(obj, "properties", {}) or {}
             name  = (getattr(obj, "name", "") or "").strip().lower()
@@ -365,10 +362,8 @@ class TiledMap:
             for layer in self.tmx.layers:
                 layer_name = getattr(layer, "name", "")
                 lname = layer_name.lower()
-                print(f"[DEBUG] 레이어 확인: {layer_name}")
                 if "enemies" in lname:
                     if hasattr(layer, "objects"):
-                        print(f"[DEBUG] Enemies 레이어에서 {len(layer.objects)}개의 오브젝트 발견")
                         for obj in layer.objects:
                             props = getattr(obj, "properties", {}) or {}
                             raw_type = props.get('enemy_type', getattr(obj, "name", "slime"))
@@ -381,11 +376,9 @@ class TiledMap:
                             ex = int(obj.x * self.scale)
                             ey = int(obj.y * self.scale)
                             spawns.append((ex, ey, enemy_type, level))
-                            print(f"[DEBUG] 적 스폰: type={enemy_type}, level={level}, pos=({ex}, {ey})")
                     else:
                         try:
                             objs = list(layer)
-                            print(f"[DEBUG] Enemies 레이어(iter)에서 {len(objs)}개의 오브젝트 발견")
                             for obj in objs:
                                 props = getattr(obj, "properties", {}) or {}
                                 raw_type = props.get('enemy_type', getattr(obj, "name", "slime"))
@@ -398,10 +391,8 @@ class TiledMap:
                                 ex = int(obj.x * self.scale)
                                 ey = int(obj.y * self.scale)
                                 spawns.append((ex, ey, enemy_type, level))
-                                print(f"[DEBUG] 적 스폰: type={enemy_type}, level={level}, pos=({ex}, {ey})")
                         except TypeError:
-                            print("[DEBUG] Enemies 레이어를 순회할 수 없습니다.")
-            print(f"[DEBUG] 총 {len(spawns)}개의 적 스폰 위치 발견")
+                            print("enemies 레이어에 적이 업슨")
             return spawns
 
     def find_portals(self):
@@ -418,22 +409,18 @@ class TiledMap:
                     if"portal_type" not in props:
                         continue
                     portal_type=str(props.get("portal_type","")).strip()
-                    target_spawn=str(props.get("target_spawn","")).strip()  # ✅ 추가
+                    target_spawn=str(props.get("target_spawn","")).strip() 
                     w=int(getattr(obj,"width",50)*self.scale) or 50
                     h=int(getattr(obj,"height",100)*self.scale) or 100
                     rect=pygame.Rect(int(obj.x*self.scale),int(obj.y*self.scale),w,h)
                     portals.append({
                         "rect":rect,
                         "portal_type":portal_type,
-                        "target_spawn":target_spawn,   # ✅ 추가
+                        "target_spawn":target_spawn, 
                     })
-            print(f"[DEBUG]TMX포탈개수:{len(portals)}")
-            for p in portals:
-                print(f"portal_type={p['portal_type']},target_spawn={p['target_spawn']},rect={p['rect']}")
             return portals
 
     def find_quest_objects(self):
-        """quest 커스텀 속성이 있는 오브젝트 위치 반환."""
         quests = []
         for layer in self.tmx.layers:
             if hasattr(layer, "tiles") or hasattr(layer, "data"):
@@ -450,10 +437,9 @@ class TiledMap:
                     qx = int(obj.x * self.scale)
                     qy = int(obj.y * self.scale)
                 except Exception as e:
-                    print(f"[DEBUG] quest 오브젝트 좌표 변환 실패: {e}")
+                    print(f"좌표 변환 실패", e)
                     continue
                 quests.append((qx, qy))
-        print(f"[DEBUG] 퀘스트 오브젝트 {len(quests)}개 발견 (파일: {getattr(self.tmx, 'filename', 'unknown')})")
         return quests
 
 
@@ -498,7 +484,7 @@ def xp_needed_for_level(level: int) -> int:
 
 def slime_max_hp_for_level(level: int) -> int:
     base_hp = 50
-    hp_per_level = 40  # 레벨이 오를수록 훨씬 크게 상승
+    hp_per_level = 40 
     return base_hp + hp_per_level * max(0, level - 1)
 
 
@@ -600,7 +586,6 @@ class Player:
 
     def add_xp(self, amount):
         self.xp += amount
-        print(f"[XP] 경험치 +{amount} (현재 {int(self.xp)}/{int(self.xp_to_next)})")
 
         while self.xp >= self.xp_to_next:
             self.xp -= self.xp_to_next
@@ -614,9 +599,6 @@ class Player:
             self.mp = self.max_mp
 
             self.xp_to_next = xp_needed_for_level(self.level)
-
-            print(f"[레벨업] LV {self.level} 달성! HP +{hp_increase}, MP +{mp_increase}")
-            print(f"[레벨업] 다음 레벨까지: {self.xp_to_next} EXP")
 
     def cast_spell(self, target_world_pos, spell_type="fireball", current_map=None):
         if spell_type not in self.known_spells:
@@ -661,13 +643,10 @@ class Player:
 
 
         if spell_type in ("meteor", "thunder", "iceberg", "backflow") and current_map is not None:
-                # 같은 레벨 슬라임 기준 HP
             same_slime_hp = slime_max_hp_for_level(self.level)
             center_x, center_y = target_world_pos
 
             if spell_type == "meteor":
-                # 메테오는 '적 자신의 체력의 20%' 데미지로 바꿨으므로,
-                # 여기서는 위치/이펙트 정보만 넘기고 데미지는 AreaEffect.update에서 계산.
                 radius = 140
                 extra = {
                     "start_pos": (sx, sy),
@@ -676,20 +655,17 @@ class Player:
                 current_map.area_effects.append(
                     AreaEffect("meteor", center_x, center_y, radius, extra=extra)
                 )
-                print("[S-스킬] 메테오 시전")
 
             elif spell_type == "thunder":
                 radius = 200
-                base_damage = max(1, int(same_slime_hp / 20))
+                base_damage = max(1, int(same_slime_hp * 0.05))
                 extra = {"damage": base_damage, "damage_multiplier": weapon_mult}
                 current_map.area_effects.append(
                     AreaEffect("thunder", center_x, center_y, radius, extra=extra)
                 )
-                print("[S-스킬] 천둥 시전")
 
             elif spell_type == "iceberg":
                 radius = 130
-                # 같은 레벨 슬라임 HP의 38%
                 base_damage = max(1, int(same_slime_hp * 0.38))
                 extra = {
                     "damage": base_damage,
@@ -699,7 +675,6 @@ class Player:
                 current_map.area_effects.append(
                     AreaEffect("iceberg", center_x, center_y, radius, extra=extra)
                 )
-                print("[S-스킬] 빙산 시전")
 
             elif spell_type == "backflow":
                 if dist == 0:
@@ -709,7 +684,6 @@ class Player:
                 dir_x = dx / dist
                 dir_y = dy / dist
 
-                # 같은 레벨 슬라임 HP의 32%
                 base_damage = max(1, int(same_slime_hp * 0.32 * weapon_mult))
 
                 for enemy in current_map.enemies:
@@ -738,7 +712,6 @@ class Player:
                 current_map.area_effects.append(
                     AreaEffect("backflow", center_x, center_y, max_range, extra=extra)
                 )
-                print("[S-스킬] 역류 시전")
 
             return None
 
@@ -763,7 +736,6 @@ class LightningChain:
         self.chain_x = x
         self.chain_y = y
         self.damage = damage
-        # 이미 맞은 적 id를 set으로 관리해 재타겟 방지
         self.hit_enemies = set(hit_enemies)
         self.lifetime = max_lifetime
         self.active = True
@@ -840,7 +812,6 @@ class LightningChain:
                 pygame.draw.lines(surface, (255, 255, 100), False, points, 4)
                 pygame.draw.lines(surface, (255, 255, 255), False, points, 2)
         else:
-            # 타겟이 없거나 첫 타격 직후에도 번쩍임을 보이도록 짧은 스파크를 그림
             jitter_points = []
             for i in range(5):
                 ang = random.uniform(0, math.tau)
@@ -868,7 +839,6 @@ class AreaEffect:
         self.x = x
         self.y = y
         self.size = size
-        # extra가 dict가 아닐 수도 있어(backflow에서 튜플 사용). dict 부분만 따로 추출.
         self.extra = extra
         self.extra_dict = extra if isinstance(extra, dict) else {}
         self.damage_multiplier = self.extra_dict.get("damage_multiplier", 1.0)
@@ -911,8 +881,6 @@ class AreaEffect:
 
     def update(self, game_map):
         self.age += 1
-
-        # 🔥 메테오
         if self.effect_type == "meteor" and not self.impact_done:
             if self.age == self.impact_frame:
                 radius = self.size
@@ -920,7 +888,6 @@ class AreaEffect:
                     ex = enemy.x + enemy.width / 2
                     ey = enemy.y + enemy.height / 2
                     if math.hypot(ex - self.x, ey - self.y) <= radius:
-                        # 메테오 데미지 = 적 자신의 최대 HP 의 20%
                         max_hp = getattr(enemy, "max_hp", 100)
                         damage = max(1, int(max_hp * 0.20 * self.damage_multiplier))
 
@@ -934,7 +901,6 @@ class AreaEffect:
 
                 self.impact_done = True
 
-        # ----- 천둥: 순차적 낙뢰 판정 -----
         elif self.effect_type == "thunder":
             for s in self.strikes:
                 if not s["hit"] and self.age == s["start"]:
@@ -959,7 +925,8 @@ class AreaEffect:
                     chain = LightningChain(sx, sy, chain_damage, [])
                     game_map.lightning_chains.append(chain)
 
-        # ----- 빙산: 범위 안 적 1회 데미지 + 얼리기 -----
+
+
         elif self.effect_type == "iceberg":
             max_hit_radius = self.size * 1.5
             base_damage = max(1, int(self.base_damage))
@@ -1862,7 +1829,6 @@ class EnemyProjectile:
         pygame.draw.circle(surface, self.color, (int(sx), int(sy)), self.radius)
 
 
-#GPT한테 이름 추천받음
 SPELL_DISPLAY_NAMES = {
     "fireball": "파이어볼",
     "ice_lans": "아이스 랜스",
@@ -1998,7 +1964,6 @@ class GameMap:
         self.damage_texts = []
         self.area_effects = []
         self.quest_npcs = []
-        print(f"[DEBUG] GameMap '{self.name}' 포탈 수: {len(self.portals)}")
 
 
 class Button:
@@ -2027,13 +1992,11 @@ def draw_target_marker(surface, camera, world_x, world_y):
     pygame.draw.circle(surface, CYAN, (sx, sy), 15, 2)
 
 def is_on_screen(entity, camera, margin=200):
-    """카메라 화면(여유 margin) 안에 있으면 True."""
     view_rect = pygame.Rect(camera.x - margin, camera.y - margin, WIDTH + margin * 2, HEIGHT + margin * 2)
     ent_rect = pygame.Rect(entity.x, entity.y, getattr(entity, "width", 0), getattr(entity, "height", 0))
     return view_rect.colliderect(ent_rect)
 
 def distance_between(a, b):
-    """엔티티 a와 b 중심 사이의 거리."""
     ax = a.x + getattr(a, "width", 0) / 2
     ay = a.y + getattr(a, "height", 0) / 2
     bx = b.x + getattr(b, "width", 0) / 2
@@ -2048,9 +2011,8 @@ def show_splash_screen(duration_ms=3000):
         try:
             img = pygame.image.load(splash_path).convert_alpha()
             splash = pygame.transform.scale(img, (WIDTH, HEIGHT))
-            print("[DEBUG] start.png 로드 성공")
         except Exception as e:
-            print(f"[DEBUG] start.png 로드 실패: {e}")
+            print(f"start.png 이상함")
     start_time = pygame.time.get_ticks()
     while pygame.time.get_ticks() - start_time < duration_ms:
         for event in pygame.event.get():
@@ -2071,7 +2033,7 @@ def load_preview_image(path, target_w, target_h, fallback_color):
             img = pygame.image.load(path).convert_alpha()
             return pygame.transform.scale(img, (target_w, target_h))
         except Exception as e:
-            print(f"[DEBUG] 프리뷰 이미지 로드 실패({path}): {e}")
+            print(f"프리뷰 이미지 이상함")
     surf = pygame.Surface((target_w, target_h))
     surf.fill(fallback_color)
     return surf
@@ -2087,9 +2049,8 @@ def main_menu():
         try:
             raw_bg = pygame.image.load(bg_path).convert_alpha()
             bg_img = pygame.transform.scale(raw_bg, (WIDTH, HEIGHT))
-            print("[DEBUG] background.png 로드 성공")
         except Exception as e:
-            print(f"[DEBUG] background.png 로드 실패: {e}")
+            print(f"백그라운드 이상함")
 
     start_btn = Button(WIDTH // 2 - 200, 550, 400, 80, "시작", GREEN, (0, 180, 0))
     custom_btn = Button(WIDTH // 2 - 200, 650, 400, 80, "커스터마이징", BLUE, (0, 150, 255))
@@ -2159,13 +2120,6 @@ def main_menu():
             start_btn.draw(screen)
             custom_btn.draw(screen)
             desc_btn.draw(screen)
-
-            if start_btn.is_clicked(pos, pressed):
-                return selected_gender
-            if custom_btn.is_clicked(pos, pressed):
-                menu_state = "custom"
-            if desc_btn.is_clicked(pos, pressed):
-                menu_state = "desc"
 
         elif menu_state == "desc":
             back_btn.check_hover(pos)
@@ -2280,7 +2234,7 @@ def draw_ui(surface, player, current_map, target_set):
     surface.blit(pos_text, (rx, ry))
 
     status_text, status_color = (
-        ("타겟 설정됨 - Enter: 시전", CYAN) if target_set else ("마우스로 적/위치 지정", GRAY)
+        ("타겟 설정됨 - Enter: 공격", CYAN) if target_set else ("마우스 우클릭으로 공격할 위치 지정", GRAY)
     )
     status_surf = info_font.render(status_text, True, status_color)
     surface.blit(status_surf, (bar_x, exp_y + bar_h + 14))
@@ -2332,10 +2286,9 @@ def draw_setting(surface, volume):
     set_surf.blit(title_surf, title_surf.get_rect(center=(set_w // 2, 60)))
 
     info_lines = [
-        "마우스로 슬라이더를 드래그해서 전체 볼륨 조절",
-        "녹음 시작/종료: R",
+        "전체 볼륨 조절",
         "마법 시전: 스페이스/마우스 왼쪽",
-        "인벤토리: I, 무기 & 마법 선택: E",
+        "인벤토리: I, 무기 & 마법 확인: E",
     ]
     for idx, line in enumerate(info_lines):
         text_surf = small_font.render(line, True, WHITE)
@@ -2385,7 +2338,7 @@ def draw_setting(surface, volume):
     vol_text = item_font.render(f"전체 볼륨: {int(ratio * 100)}%", True, WHITE)
     set_surf.blit(vol_text, (slider_x, slider_y - 40))
 
-    hint = small_font.render("※ 슬라이더를 클릭/드래그해서 조절하세요.", True, LIGHT_GRAY)
+    hint = small_font.render("※ 클릭, 드래그해서 볼륨을 조절", True, LIGHT_GRAY)
     set_surf.blit(hint, (slider_x, slider_y + slider_h + 20))
 
     surface.blit(set_surf, (set_x, set_y))
@@ -2406,12 +2359,12 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
     overlay.blit(title, title.get_rect(center=(WIDTH//2, 90)))
 
     if swap_phase == 0:
-        info1 = small_font.render("1단계: 교체할 슬롯 선택", True, YELLOW)
-        info2 = small_font.render("↑↓/WS 또는 1~4 선택", True, WHITE)
+        info1 = small_font.render("1단계: 교체할 마법 선택", True, YELLOW)
+        info2 = small_font.render("↑↓ 또는 1~4 선택", True, WHITE)
         info3 = small_font.render("Enter/Space: 다음 단계", True, LIGHT_GRAY)
     else:
         info1 = small_font.render("2단계: 장착할 마법 선택", True, YELLOW)
-        info2 = small_font.render("↑↓/WS", True, WHITE)
+        info2 = small_font.render("↑↓", True, WHITE)
         info3 = small_font.render("Enter/Space: 장착", True, LIGHT_GRAY)
 
     overlay.blit(info1, (WIDTH//2 - 260, 130))
@@ -2441,9 +2394,9 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
             prefix = "  "
 
         text = item_font.render(prefix + label, True, color)
-        overlay.blit(text, (left_x, start_y + i * line_h + 40))
+        overlay.blit(text, (left_x, start_y + i * line_h + 20 + 20))
 
-    right_x = WIDTH//2 + 40
+    right_x = WIDTH//2 + 30 + 10
     spell_title = item_font.render("장착 가능 마법 (미장착)", True, WHITE)
     overlay.blit(spell_title, (right_x, start_y))
 
@@ -2460,7 +2413,7 @@ def draw_swap_menu(surface, player, swap_phase, swap_selected_slot, swap_selecte
             prefix = "  "
 
         text = item_font.render(prefix + label, True, color)
-        overlay.blit(text, (right_x, start_y + idx * line_h))
+        overlay.blit(text, (right_x, start_y + idx * line_h + 40))
 
     esc_text = small_font.render("ESC: 취소", True, LIGHT_GRAY)
     overlay.blit(esc_text, (WIDTH//2 - 40, HEIGHT))
@@ -2617,7 +2570,6 @@ def use_hp_potion(player):
         player.inventory["HP 포션"] -= 1
         if player.inventory["HP 포션"] <= 0:
             del player.inventory["HP 포션"]
-        print(f"HP 포션 사용! {int(old_hp)} -> {int(player.hp)} / {player.max_hp}")
     else:
         print("HP 포션이 없습니다!")
 
@@ -2636,6 +2588,8 @@ ITEM_USE_FUNCTIONS = {
     "HP 포션": use_hp_potion,
     "MP 포션": use_mp_potion,
 }
+
+weapon_menu_requested = False
 
 
 def learn_spell_from_book(player, item_name):
@@ -2676,7 +2630,6 @@ def equip_weapon(player, item_name):
 
 
 def record_audio_to_file(filename, duration=3, samplerate=44100):
-    print(f"[녹음] {duration}초 동안 녹음 시작...")
     recording = sd.rec(
         int(duration * samplerate),
         samplerate=samplerate,
@@ -2685,10 +2638,10 @@ def record_audio_to_file(filename, duration=3, samplerate=44100):
     )
     sd.wait()
     sf.write(filename, recording, samplerate)
-    print(f"[녹음] 저장 완료: {filename}")
 
 
 def use_item(player, item_name):
+    global weapon_menu_requested
     if player.inventory.get(item_name, 0) <= 0:
         return
     if item_name in ITEM_USE_FUNCTIONS:
@@ -2698,7 +2651,7 @@ def use_item(player, item_name):
         learn_spell_from_book(player, item_name)
         return
     if item_name in WEAPON_ITEMS:
-        equip_weapon(player, item_name)
+        weapon_menu_requested = True
         return
 
 def draw_skill_menu(surface, player, target_set, selected_slot):
@@ -2714,11 +2667,11 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
     item_font = get_korean_font(24)
     small_font = get_korean_font(18)
 
-    title = "마법 선택 (E: 닫기 / Enter: 선택)"
+    title = "마법 선택 (M: 닫기 / Enter: 선택)"
     title_surf = title_font.render(title, True, WHITE)
     menu_surf.blit(title_surf, title_surf.get_rect(center=(menu_w // 2, 40)))
 
-    hint = small_font.render("↑/↓ 혹은 1~4로 선택, R: 슬롯 교체, M: 무기 선택 창으로", True, LIGHT_GRAY)
+    hint = small_font.render("↑/↓ , 1~4로, M: 무기 선택 창으로", True, LIGHT_GRAY)
     menu_surf.blit(hint, (20, 80))
 
     if player.equipped_spells and 0 <= selected_slot < len(player.equipped_spells):
@@ -2738,7 +2691,7 @@ def draw_skill_menu(surface, player, target_set, selected_slot):
     target_surf = small_font.render(target_text, True, target_color)
     menu_surf.blit(target_surf, (20, 160))
 
-    spell_title = item_font.render("마법 슬롯 (1~4로 선택, Enter로 시전)", True, WHITE)
+    spell_title = item_font.render("마법 슬롯 (1~4로 선택, Enter로 사용)", True, WHITE)
     menu_surf.blit(spell_title, (40, 190))
 
     for idx in range(MAX_SPELL_SLOTS):
@@ -2781,11 +2734,11 @@ def draw_weapon_menu(surface, player, available_weapons, selected_index):
     item_font = get_korean_font(24)
     small_font = get_korean_font(18)
 
-    title = "무기 선택 (Q: 닫기 / Enter: 장착)"
+    title = "무기 선택 (N: 닫기 / Enter: 장착)"
     title_surf = title_font.render(title, True, WHITE)
     menu_surf.blit(title_surf, title_surf.get_rect(center=(menu_w // 2, 40)))
 
-    hint = small_font.render("↑/↓ 혹은 1~9로 선택 후 Enter로 장착, N: 마법 선택 창으로", True, LIGHT_GRAY)
+    hint = small_font.render("↑/↓,  1~9로 선택 후 Enter로 장착, N: 마법 선택 창으로", True, LIGHT_GRAY)
     menu_surf.blit(hint, (20, 80))
 
     current_text = small_font.render(f"현재 무기: {player.weapon}", True, YELLOW)
@@ -2818,10 +2771,10 @@ def show_fireball_intro_and_record(player):
     text_font = get_korean_font(24)
     small_font = get_korean_font(18)
 
-    t1 = title_font.render("당신의 안에서 불소리가 들립니다....", True, ORANGE)
-    t2 = text_font.render("기본 마법 '파이어볼'을 사용할 수 있게 되었습니다.", True, WHITE)
-    t3 = text_font.render("지금부터 이 마법을 사용할 때 외칠 주문을 직접 녹음할 수 있습니다.", True, WHITE)
-    t4 = small_font.render("아무 키나 누르세요....", True, LIGHT_GRAY)
+    t1 = title_font.render("당신의 안에서 불의 소리가 들립니다....", True, ORANGE)
+    t2 = text_font.render("'파이어볼'을 사용할 수 있게 되었습니다.", True, WHITE)
+    t3 = text_font.render("지금부터 마법을 사용할 때 나올 소리를 직접 녹음할 수 있습니다.", True, WHITE)
+    t4 = small_font.render("아무 키나 누르세요.", True, LIGHT_GRAY)
 
     overlay.blit(t1, t1.get_rect(center=(WIDTH//2, HEIGHT//2 - 80)))
     overlay.blit(t2, t2.get_rect(center=(WIDTH//2, HEIGHT//2 - 30)))
@@ -2874,9 +2827,8 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
             record_stream.start()
             record_start_time = time.time()
             is_recording = True
-            print(f"[녹음] '{display_name}' 녹음 시작 (최대 {max_duration}초)")
         except Exception as e:
-            print(f"[녹음] 시작 실패: {e}")
+            print(f"녹음 시작 실패")
             is_recording = False
             record_stream = None
 
@@ -2889,7 +2841,7 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
                 record_stream.stop()
                 record_stream.close()
         except Exception as e:
-            print(f"[녹음] 스트림 종료 중 오류: {e}")
+            print(f"녹음 종료 중 오류: {e}")
         record_stream = None
         is_recording = False
         if not recorded_chunks:
@@ -2902,7 +2854,7 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
             has_recorded = True
 
         except Exception as e:
-            print(f"[녹음] 파일 저장/로드 실패: {e}")
+            print(f"녹음 파일 저장, 불러오기 실패")
 
     record_btn = Button(popup_x + 40, popup_y + 230, 150, 60, "녹음", BLUE, (0, 150, 255))
     play_btn = Button(popup_x + 220, popup_y + 230, 150, 60, "소리 듣기", GREEN, (0, 180, 0))
@@ -2941,7 +2893,7 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
                 frames, overflowed = record_stream.read(frames_per_chunk)
                 recorded_chunks.append(frames.copy())
             except Exception as e:
-                print(f"[녹음] 읽기 오류: {e}")
+                print(f"녹음 읽기 오류: {e}")
                 stop_recording()
             else:
                 elapsed = time.time() - record_start_time
@@ -2966,8 +2918,8 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
         popup_surf.blit(title_surf, title_surf.get_rect(center=(popup_w//2, 50)))
 
         line1 = text_font.render("녹음: 최대 3초 동안 말할 수 있고, 다시 누르면 중지됩니다.", True, WHITE)
-        line2 = text_font.render("소리 듣기: 현재 저장된 주문 소리를 들어봅니다.", True, WHITE)
-        line3 = small_font.render("마음에 안 들면 재녹음하세요.", True, LIGHT_GRAY)
+        line2 = text_font.render("소리 듣기: 현재 저장된 주문 소리를 들어볼 수 있습니다.", True, WHITE)
+        line3 = small_font.render("마음에 들지 않으면 재녹음하세요.", True, LIGHT_GRAY)
         popup_surf.blit(line1, (40, 110))
         popup_surf.blit(line2, (40, 140))
         popup_surf.blit(line3, (40, 170))
@@ -2977,10 +2929,10 @@ def open_spell_sound_popup(spell_id, display_name, initial_sound=None, mode="new
             status_color = YELLOW
         else:
             if current_sound is None:
-                status_text = "상태: 녹음된 주문 소리가 없습니다."
+                status_text = "상태: 녹음된 소리가 없습니다."
                 status_color = LIGHT_GRAY
             else:
-                status_text = "상태: 주문 소리가 등록되어 있습니다."
+                status_text = "상태: 소리가 등록되어 있습니다."
                 status_color = CYAN if has_recorded else GREEN
         status_surf = text_font.render(status_text, True, status_color)
         popup_surf.blit(status_surf, (40, 200))
@@ -3006,7 +2958,7 @@ def record_spell_sound_ui(spell_id):
     overlay = pygame.Surface((WIDTH, HEIGHT))
     overlay.fill(BLACK)
     text1 = message_font.render("마법 주문 녹음", True, WHITE)
-    text2 = small_font.render("마이크에 대고 을 말하세요.", True, WHITE)
+    text2 = small_font.render("마이크에 대고 말하세요.", True, WHITE)
     text3 = small_font.render(f"{duration}초 동안 자동 녹음됩니다.", True, CYAN)
     text4 = small_font.render("3...2...1...", True, YELLOW)
     overlay.blit(text1, text1.get_rect(center=(WIDTH//2, HEIGHT//2 - 60)))
@@ -3033,7 +2985,7 @@ def record_spell_sound_ui(spell_id):
         sound = pygame.mixer.Sound(filename)
         return sound
     except Exception as e:
-        print(f"[녹음] 사운드 로드 실패: {e}")
+        print(f"녹음 사운드 로드 실패: {e}")
         return None
 
 #GPT 작성
@@ -3080,8 +3032,6 @@ def open_sound_edit_menu(player):
                     if sound is not None:
                         player.spell_sounds[spell_id] = sound
                         return True
-                    else:
-                        print("[소리 교환권] 주문 소리 변경이 취소되었습니다.")
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 spell_id = spell_ids[selected]
                 display_name = SPELL_DISPLAY_NAMES.get(spell_id, spell_id)
@@ -3090,8 +3040,6 @@ def open_sound_edit_menu(player):
                 if sound is not None:
                     player.spell_sounds[spell_id] = sound
                     return True
-                else:
-                    print("[소리 교환권] 주문 소리 변경이 취소되었습니다.")
 
         overlay = pygame.Surface((WIDTH, HEIGHT))
         overlay.set_alpha(230)
@@ -3123,15 +3071,11 @@ def open_sound_edit_menu(player):
 
 
 def use_sound_ticket(player):
-    print("[소리 교환권] 사용 시도")
     used = open_sound_edit_menu(player)
     if used:
         player.inventory["소리 교환권"] -= 1
         if player.inventory["소리 교환권"] <= 0:
             del player.inventory["소리 교환권"]
-        print("[소리 교환권] 1장을 사용했습니다.")
-    else:
-        print("[소리 교환권] 사용이 취소되었습니다.")
 
 
 ITEM_USE_FUNCTIONS["소리 교환권"] = use_sound_ticket
@@ -3144,16 +3088,15 @@ def map_transition_effect(text="맵 이동 중..."):
         try:
             img = pygame.image.load(start_path).convert_alpha()
             bg = pygame.transform.scale(img, (WIDTH, HEIGHT))
-            print("[DEBUG] start.png (맵 전환) 로드 성공")
         except Exception as e:
-            print(f"[DEBUG] start.png (맵 전환) 로드 실패: {e}")
+            print(f"맵 전환 로드실패")
 
     font = get_korean_font(50)
     text_surf = font.render(text, True, WHITE)
     text_rect = text_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 
     start_time = pygame.time.get_ticks()
-    duration = 2000  # 2초 정도 표시
+    duration = 2000 
     while pygame.time.get_ticks() - start_time < duration:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3170,7 +3113,7 @@ def map_transition_effect(text="맵 이동 중..."):
 
 
 def main():
-    global VOLUME
+    global VOLUME, weapon_menu_requested
     gender = main_menu()
 
     game_maps = {}
@@ -3206,17 +3149,13 @@ def main():
             tmx_map = TiledMap("map.tmx")
             game_maps["house"] = GameMap("house", tmx_house)
             game_maps["map"] = GameMap("map", tmx_map)
-            print("house.tmx, map.tmx 로드 성공!")
         except Exception as e:
-            print(f"TMX 로드 실패: {e}.")
             game_maps = None
     elif os.path.exists("map.tmx"):
         try:
             tmx_map = TiledMap("map.tmx")
             game_maps["map"] = GameMap("map", tmx_map)
-            print("map.tmx 로드 성공!")
         except Exception as e:
-            print(f"TMX 로드 실패: {e}.")
             game_maps = None
     else:
         game_maps = None
@@ -3253,7 +3192,7 @@ def main():
                 img = pygame.image.load(fname).convert_alpha()
                 return pygame.transform.scale(img, (size, size))
             except Exception as e:
-                print(f"[DEBUG] {fname} 로드 실패: {e}")
+                print(f"{fname} 로드 실패")
         surf = pygame.Surface((size, size), pygame.SRCALPHA)
         color = BLUE if gender == "male" else (255, 105, 180)
         surf.fill(color)
@@ -3266,7 +3205,6 @@ def main():
             gm.quest_npcs = []
             for qx, qy in gm.tiled_map.find_quest_objects():
                 gm.quest_npcs.append({"x": qx, "y": qy, "img": npc_image})
-            print(f"[DEBUG] 맵 '{gm.name}'에 퀘스트 NPC {len(gm.quest_npcs)}개 배치 (opposite_gender={opposite_gender})")
 
     def next_quest_target(current_target):
         if current_target is None:
@@ -3274,10 +3212,8 @@ def main():
         return min(200, current_target + 5)
 
     def grant_quest_reward(player):
-        """현재 레벨 기준 약 1.5레벨 분량의 XP 지급."""
         remaining = 1.5
         xp_gain = 0
-        # 첫 부분: 현재 레벨 xp_to_next 기준
         part = min(1.0, remaining)
         xp_gain += int(player.xp_to_next * part)
         remaining -= part
@@ -3288,7 +3224,6 @@ def main():
             xp_gain += int(xp_need * part)
             remaining -= part
             temp_level += 1
-        print(f"[퀘스트 보상] XP {xp_gain} 지급 (약 1.5레벨 상승분)")
         player.add_xp(xp_gain)
 
     def collect_available_weapons():
@@ -3312,13 +3247,11 @@ def main():
     running = True
 
     def get_xp_reward(enemy_level):
-        return max(1, xp_needed_for_level(enemy_level) // 6)  # XP 조금 줄임
+        return max(1, xp_needed_for_level(enemy_level) // 6) 
 
-    # 퀘스트 NPC 위치 셋업 (플레이어 생성 후)
     setup_quest_npcs_for_all_maps()
 
     def draw_quest_status(surface):
-        """우측 상단에 현재 퀘스트 진행 상황 표시."""
         status_font = get_korean_font(22)
         small_font = get_korean_font(18)
         padding = 16
@@ -3402,7 +3335,7 @@ def main():
                         show_inventory = False
                         show_setting = False
                         show_weapon_menu = False
-                elif event.key == pygame.K_n:
+                elif event.key == pygame.K_n and show_skill_menu == True:
                     show_weapon_menu = True
                     show_skill_menu = False
                     show_inventory = False
@@ -3413,7 +3346,8 @@ def main():
                     else:
                         selected_weapon_index = 0
                     selected_spell_slot = min(selected_spell_slot, len(player.equipped_spells) - 1) if player.equipped_spells else 0
-                elif event.key == pygame.K_m:
+
+                elif event.key == pygame.K_m and show_skill_menu == True:
                     spells = list(player.known_spells.keys())
                     equipped_set = set(player.equipped_spells[:MAX_SPELL_SLOTS])
                     swap_unequipped_spells = [sid for sid in spells if sid not in equipped_set]
@@ -3440,6 +3374,17 @@ def main():
                     show_weapon_menu = False
                     show_inventory = False
                     show_setting = False
+
+                elif event.key == pygame.K_n and show_weapon_menu:
+                    show_weapon_menu = False
+                    show_skill_menu = True
+
+                elif event.key == pygame.K_m and show_swap_menu:
+                    show_swap_menu = False
+                    show_skill_menu = True
+
+                
+                    
                 elif event.key == pygame.K_ESCAPE and (show_inventory or show_skill_menu or show_setting or show_weapon_menu):
                     show_inventory = False
                     show_skill_menu = False
@@ -3453,7 +3398,6 @@ def main():
                     if not auto_targeting:
                         target_position = None
 
-                # NPC 상호작용 (F키)
                 if event.key == pygame.K_f and current_map:
                     interacted = False
                     for npc in current_map.quest_npcs:
@@ -3461,9 +3405,9 @@ def main():
                         if distance_between(dummy_ent, player) <= quest_npc_interact_range:
                             interacted = True
                             if quest_final_complete:
-                                print("[퀘스트] 이미 최종 퀘스트를 완료했습니다.")
+                                print("[퀘스트 끗")
                             elif quest_active:
-                                print(f"[퀘스트 진행 중] 슬라임 {quest_kill_count}/{quest_kill_target}마리")
+                                print(f"퀘스트 진행중")
                             else:
                                 quest_active = True
                                 quest_kill_count = 0
@@ -3471,7 +3415,7 @@ def main():
                                 print(f"[퀘스트 수락] 슬라임 {quest_kill_target}마리 처치")
                             break
                     if not interacted and current_map.quest_npcs:
-                        print("[퀘스트] NPC가 너무 멀리 있어 상호작용할 수 없습니다.")
+                        print("너무 멀리잇슨")
 
                 if show_inventory:
                     if pygame.K_1 <= event.key <= pygame.K_9:
@@ -3624,7 +3568,6 @@ def main():
 
                     target_map = game_maps[target_name]
 
-                    # 🔥 여기! portal 의 target_spawn 사용
                     target_spawn = portal.get("target_spawn", "")
                     sx, sy = target_map.tiled_map.find_named_spawn(target_spawn)
 
@@ -3644,7 +3587,6 @@ def main():
                     break
         if current_map:
             for enemy in current_map.enemies[:]:
-                # 화면에 가까운 적만 업데이트해 성능 부담 감소
                 if is_on_screen(enemy, camera, margin=180):
                     enemy.update(player, current_map.tiled_map, enemy_projectiles, current_map.damage_texts)
 
@@ -3658,7 +3600,6 @@ def main():
                         player.add_xp(xp_value)
                         xp_orbs.append(XPOrb(drop_x, drop_y, value=xp_value))
 
-                        # 지팡이 드랍(레벨 구간 당 4%, 겹치면 누적), 마법서와 상호 배타
                         staff_candidates = []
                         if 1 <= level <= 10:
                             staff_candidates.append("나무 지팡이")
@@ -3674,12 +3615,11 @@ def main():
                         staff_dropped = False
                         book_dropped = False
                         for staff in staff_candidates:
-                            if random.random() < 0.04:
+                            if random.random() < 1:
                                 item_drops.append(ItemDrop(drop_x, drop_y, staff))
                                 staff_dropped = True
 
-                        # 슬라임 레벨 기반 마법서 드랍 (총 10% 확률, 각 속성 2.5%) - 지팡이가 안 떴을 때만
-                        if (not staff_dropped) and random.random() < 0.10:
+                        if (not staff_dropped) and random.random() < 0.1:
                             if 1 <= level <= 30:
                                 pool = SLIME_SPELLBOOK_DROPS_C
                             elif 70 <= level <= 100:
@@ -3696,12 +3636,9 @@ def main():
                         if (not staff_dropped) and (not book_dropped) and random.random() < 0.05:
                             item_drops.append(ItemDrop(drop_x, drop_y, "소리 교환권"))
 
-                        # 퀘스트 진행도 업데이트
                         if quest_active:
                             quest_kill_count += 1
-                            print(f"[퀘스트] 슬라임 처치 {quest_kill_count}/{quest_kill_target}")
                             if quest_kill_count >= quest_kill_target:
-                                print(f"[퀘스트 완료] 슬라임 {quest_kill_target}마리 처치")
                                 grant_quest_reward(player)
                                 quest_active = False
                                 if quest_kill_target >= 200:
@@ -3739,7 +3676,6 @@ def main():
                                 "y": enemy.home_y,
                                 "type": etype,
                             })
-                            print(f"[DEBUG] {etype} 리스폰 예약: {respawn_delay}틱 후 ({enemy.home_x}, {enemy.home_y})")
                         current_map.enemies.remove(enemy)
 
             for entry in current_map.respawn_queue[:]:
@@ -3751,7 +3687,6 @@ def main():
                     if etype in enemy_factory:
                         new_enemy = enemy_factory[etype](ex, ey, level)
                         current_map.enemies.append(new_enemy)
-                        print(f"[DEBUG] {etype}(Lv.{level}) 리스폰! 위치=({ex}, {ey})")
                     current_map.respawn_queue.remove(entry)
 
             for chain in current_map.lightning_chains[:]:
@@ -3777,7 +3712,6 @@ def main():
                         spell.y - (enemy.y + enemy.height/2)
                     ) < spell.radius + enemy.width/2:
 
-                        # 🔥 1) 같은 레벨 슬라임 HP 기준으로 “한 방 데미지” 계산
                         player_level = getattr(player, "level", 1)
                         same_level_slime_hp = slime_max_hp_for_level(player_level)
 
@@ -3785,13 +3719,11 @@ def main():
                         weapon_mult = player.get_weapon_multiplier()
                         damage = max(1, int(same_level_slime_hp * base_ratio * weapon_mult))
 
-                        # 🔥 2) 실제 적 HP 깎기 + 데미지 텍스트
                         enemy.hp -= damage
                         current_map.damage_texts.append(
                             DamageText(enemy.x + enemy.width/2, enemy.y, damage)
                         )
 
-                        # 🔥 3) 상태이상 / 추가 효과는 기존대로 유지
                         if spell.spell_type == "fireball":
                             enemy.apply_burn(duration=600, total_damage=50)
 
@@ -3799,7 +3731,6 @@ def main():
                             enemy.apply_ice_hit()
 
                         elif spell.spell_type == "lightning_bolt":
-                            # 체인 데미지도 이번 한 방 기준으로
                             chain = LightningChain(
                                 enemy.x + enemy.width/2,
                                 enemy.y + enemy.height/2,
@@ -3826,10 +3757,21 @@ def main():
                 player.hp -= proj.damage
                 proj.active = False
 
+        if weapon_menu_requested and not show_weapon_menu:
+            weapon_menu_requested = False
+            show_weapon_menu = True
+            show_skill_menu = False
+            show_inventory = False
+            show_setting = False
+            available_weapons = collect_available_weapons()
+            if player.weapon in available_weapons:
+                selected_weapon_index = available_weapons.index(player.weapon)
+            else:
+                selected_weapon_index = 0
+
         for drop in item_drops[:]:
             if pygame.Rect(player.x, player.y, player.width, player.height).colliderect(drop.get_rect()):
                 player.inventory[drop.item_name] = player.inventory.get(drop.item_name, 0) + 1
-                print(f"'{drop.item_name}' 을(를) 주웠습니다!")
                 item_drops.remove(drop)
 
         for orb in xp_orbs[:]:
@@ -3852,12 +3794,10 @@ def main():
 
         if current_map:
             current_map.tiled_map.draw(screen, camera)
-            # 퀘스트 NPC 표시 (플레이어와 반대 성별 스탠딩 이미지)
             for npc in current_map.quest_npcs:
                 if is_on_screen(type("E", (), {"x": npc["x"], "y": npc["y"], "width": PLAYER_SIZE, "height": PLAYER_SIZE})(), camera, margin=150):
                     nx, ny = camera.apply_pos(npc["x"], npc["y"])
                     screen.blit(npc["img"], (nx, ny))
-                    # 머리 위 표시: 퀘스트 상태에 따라 ! / 진행도 / 최종 완료 메시지
                     indicator_font = get_korean_font(18)
                     if quest_final_complete:
                         text = "축하합니다 용사님!"
@@ -3937,8 +3877,6 @@ def main():
         pygame.display.flip()
 
     pygame.quit()
-
-
 
 if __name__ == "__main__":
     load_slime_frames()
